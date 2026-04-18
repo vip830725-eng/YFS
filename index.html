@@ -91,6 +91,27 @@ tr:hover td{background:#fafaf8;}
 </head>
 <body>
 
+<!-- 登入遮罩 -->
+<div id="login-overlay" style="position:fixed;inset:0;background:#1a1a1a;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;padding:40px 36px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,.3);">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:28px;margin-bottom:8px;">🥩</div>
+      <div style="font-size:18px;font-weight:600;color:#1a1a1a;">永豐順肉品</div>
+      <div style="font-size:12px;color:#888;margin-top:4px;">進貨管理系統</div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">帳號</label>
+      <input id="login-user" type="text" placeholder="請輸入帳號" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:7px;font-size:14px;outline:none;" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
+    </div>
+    <div style="margin-bottom:20px;">
+      <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">密碼</label>
+      <input id="login-pass" type="password" placeholder="請輸入密碼" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:7px;font-size:14px;outline:none;" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button onclick="doLogin()" style="width:100%;padding:10px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">登入</button>
+    <div id="login-err" style="color:#c0392b;font-size:12px;text-align:center;margin-top:10px;height:16px;"></div>
+  </div>
+</div>
+
 <div class="topbar">
   <h1>🥩 永豐順肉品｜進貨管理系統</h1>
   <div class="sync"><div class="dot" id="dot"></div><span id="sync-txt">未設定資料庫</span></div>
@@ -126,13 +147,14 @@ tr:hover td{background:#fafaf8;}
       <div><label class="fl">品名</label>
         <div class="sb"><input id="i-name" placeholder="搜尋品名..." oninput="ddName(this.value)" onfocus="ddName(this.value)" onkeydown="ddKeyNav(event,'dd-name','selName')" autocomplete="off"/>
         <div class="dd" id="dd-name"></div></div></div>
-      <div><label class="fl">單價（元/公斤）</label><input type="number" id="i-price" placeholder="0" min="0" step="0.01" oninput="calcAmt()"/></div>
+      <div><label class="fl">單價（元/公斤）</label><input type="number" id="i-price" placeholder="0" min="0" step="0.01" oninput="calcAmt();checkPriceChange()" style="transition:border .2s;"/></div>
     </div>
     <div class="g4">
       <div><label class="fl">數量（公斤）</label><input type="number" id="i-qty" placeholder="0" min="0" step="0.01" oninput="calcAmt()"/></div>
     </div>
     <div class="g3">
       <div><label class="fl">金額（自動）</label><input type="number" id="i-amt" readonly/></div>
+    <div id="price-hint" style="grid-column:span 2;margin-top:-6px;"></div>
       <div><label class="fl">備註</label><input id="i-note" placeholder="選填"/></div>
       <div></div>
     </div>
@@ -339,7 +361,7 @@ tr:hover td{background:#fafaf8;}
 // ══════════════════════════════════════
 // 資料與狀態
 // ══════════════════════════════════════
-let API='';
+let API='https://script.google.com/macros/s/AKfycbx6zl1IfZoIjB1AK06QHvUoUqSkX2JpLIzLxezAj4s8w26pvlOaZ1RGUVGkf-86ZPYG/exec';
 let purchases=[], expenses=[], PRODS=[], suppliers={purchase:[],expense:[]};
 let linked=[], editPurchaseId=null, editExpenseId=null, editSupId=null, editSupType=null;
 
@@ -667,9 +689,63 @@ function ddName(q){
 function selName(n){
   document.getElementById('i-name').value=n;
   document.getElementById('dd-name').classList.remove('open');
-  // 自動帶入此品名上次的連結商品
   autoFillLinked(n);
+  autoFillPrice(n);
 }
+function autoFillPrice(name){
+  // 找最近一筆同品名的進貨，帶入單價
+  const prev=[...purchases].reverse().find(p=>p.name===name&&p.price);
+  if(!prev)return;
+  const priceEl=document.getElementById('i-price');
+  if(priceEl&&!priceEl.value){
+    priceEl.value=prev.price;
+    priceEl.dataset.histPrice=prev.price; // 記住歷史單價
+    calcAmt();
+    msgShow('p-msg',`已帶入上次單價：$${prev.price}/公斤`);
+    setTimeout(()=>{
+      const el=document.getElementById('p-msg');
+      if(el&&el.textContent.includes('已帶入上次單價'))el.textContent='';
+    },3000);
+  }
+}
+// 取得某品名的歷史平均單價（加權平均，排除當筆）
+function getAvgPrice(name, excludeId=null){
+  const rows=purchases.filter(p=>p.name===name&&p.price&&(!excludeId||String(p.id)!==String(excludeId)));
+  if(!rows.length)return null;
+  const totalAmt=rows.reduce((s,r)=>s+r.amount,0);
+  const totalQty=rows.reduce((s,r)=>s+r.qty,0);
+  return totalQty>0?totalAmt/totalQty:null;
+}
+// 判斷單價異動幅度（超過2%算異動）
+function priceStatus(price,avgPrice){
+  if(!avgPrice||!price)return null;
+  const diff=price-avgPrice;
+  const pct=diff/avgPrice*100;
+  if(Math.abs(pct)<2)return null;
+  return{diff,pct,up:diff>0};
+}
+
+function checkPriceChange(){
+  const el=document.getElementById('i-price');
+  const cur=parseFloat(el.value)||0;
+  const hist=parseFloat(el.dataset.histPrice||0);
+  if(!hist||!cur)return;
+  const diff=cur-hist;
+  const pct=Math.abs(diff/hist*100).toFixed(1);
+  if(Math.abs(diff)<0.01){
+    el.style.borderColor='';el.style.fontWeight='';
+    document.getElementById('price-hint').textContent='';
+    return;
+  }
+  const up=diff>0;
+  el.style.borderColor=up?'#c0392b':'#2d7d46';
+  el.style.fontWeight='600';
+  document.getElementById('price-hint').innerHTML=
+    `<span style="color:${up?'#c0392b':'#2d7d46'};font-size:12px;font-weight:600;">
+      ${up?'▲':'▼'} 與上次（$${hist}）相差 ${up?'+':''}${diff.toFixed(2)} (${up?'+':''}${up?pct:'-'+pct}%)
+    </span>`;
+}
+
 function autoFillLinked(name){
   // 找最近一筆有此品名且有連結的進貨
   const prev=[...purchases].reverse().find(p=>p.name===name&&p.linked&&p.linked.length);
@@ -782,6 +858,8 @@ async function addPurchase(){
   // 清空表單
   ['i-name','i-price','i-qty','i-amt','i-note','i-sup'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('i-date').value=today;
+  const ph=document.getElementById('price-hint');if(ph)ph.textContent='';
+  const pe=document.getElementById('i-price');if(pe){pe.style.borderColor='';pe.style.fontWeight='';pe.dataset.histPrice='';}
   linked=[];renderTags();
   msgShow('p-msg',`已新增：${name} ×${qty}公斤，${fmt(amt)}`);
   // 送到雲端
@@ -905,11 +983,15 @@ function renderHistory(){
     const lk=r.linked&&r.linked.length
       ?r.linked.map(l=>`<span class="badge bt" style="margin:1px;">${l}</span>`).join('')
       :'<span style="color:#ccc;font-size:11px;">-</span>';
+    const avg=getAvgPrice(r.name,r.id);
+    const ps=priceStatus(r.price,avg);
+    const priceStyle=ps?(ps.up?'color:#c0392b;font-weight:700;':'color:#2d7d46;font-weight:700;'):'';
+    const priceHint=ps?` <span style="font-size:10px;${priceStyle}">${ps.up?'▲':'▼'}${Math.abs(ps.pct).toFixed(1)}%</span>`:'';
     return `<tr>
       <td>${r.date}</td>
       <td style="font-weight:600;">${r.name}</td>
       <td>${r.supplier||'-'}</td>
-      <td>${fmtD(r.price)}</td>
+      <td style="${priceStyle}">${fmtD(r.price)}${priceHint}</td>
       <td>${(r.qty||0).toFixed(2)}</td>
       <td style="font-weight:600;">${fmt(r.amount)}</td>
       <td style="max-width:160px;">${lk}</td>
@@ -1185,12 +1267,23 @@ function genReport(){
   </div>
   <div class="card" style="margin-bottom:12px;">
     <div style="font-size:13px;font-weight:600;margin-bottom:10px;">🥩 進貨品項排行（前15）</div>
-    ${itemList.length?`<table><thead><tr><th>品名</th><th>筆數</th><th>數量(kg)</th><th style="width:160px;">佔比</th><th>金額</th></tr></thead>
-    <tbody>${itemList.map(([k,d])=>`<tr>
-      <td>${k}</td><td>${d.cnt}</td><td>${d.kg.toFixed(1)}</td>
-      <td><div style="display:flex;align-items:center;gap:6px;"><div style="flex:1;height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;"><div style="width:${Math.round(d.tot/maxI*100)}%;height:100%;background:#2d7d46;border-radius:3px;"></div></div><span style="font-size:11px;color:#888;">${Math.round(d.tot/totalP*100)}%</span></div></td>
-      <td style="font-weight:600;">${fmt(d.tot)}</td>
-    </tr>`).join('')}</tbody></table>`:'<div class="empty">無資料</div>'}
+    ${itemList.length?`<table><thead><tr><th>品名</th><th>筆數</th><th>數量(kg)</th><th>平均單價</th><th style="width:140px;">佔比</th><th>金額</th></tr></thead>
+    <tbody>${itemList.map(([k,d])=>{
+      // 計算此品名在報表區間內的加權平均單價
+      const nameRows=mp.filter(r=>r.name===k);
+      const avgKg=nameRows.reduce((s,r)=>s+r.amount,0)/nameRows.reduce((s,r)=>s+r.qty,0);
+      // 與全部歷史比較
+      const histAvg=getAvgPrice(k);
+      const ps=histAvg?priceStatus(avgKg,histAvg):null;
+      const pStyle=ps?(ps.up?'color:#c0392b;font-weight:700':'color:#2d7d46;font-weight:700'):'';
+      const pHint=ps?` <span style="font-size:10px;">${ps.up?'▲':'▼'}${Math.abs(ps.pct).toFixed(1)}%</span>`:'';
+      return `<tr>
+        <td>${k}</td><td>${d.cnt}</td><td>${d.kg.toFixed(1)}</td>
+        <td style="${pStyle}">${fmtD(avgKg)}${pHint}</td>
+        <td><div style="display:flex;align-items:center;gap:6px;"><div style="flex:1;height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;"><div style="width:${Math.round(d.tot/maxI*100)}%;height:100%;background:#2d7d46;border-radius:3px;"></div></div><span style="font-size:11px;color:#888;">${Math.round(d.tot/totalP*100)}%</span></div></td>
+        <td style="font-weight:600;">${fmt(d.tot)}</td>
+      </tr>`;
+    }).join('')}</tbody></table>`:'<div class="empty">無資料</div>'}
   </div>
   <div class="card">
     <div style="font-size:13px;font-weight:600;margin-bottom:10px;">💸 開銷明細</div>
@@ -1552,6 +1645,31 @@ document.getElementById('e-pay').addEventListener('change',showBank);
 document.getElementById('e-sup').addEventListener('input',showBank);
 document.getElementById('e-s').addEventListener('change',renderExpense);
 document.getElementById('e-e').addEventListener('change',renderExpense);
+
+// ── 登入 ──
+const AUTH={user:'YFS',pass:'23028003'};
+function doLogin(){
+  const u=document.getElementById('login-user').value.trim();
+  const p=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-err');
+  if(u===AUTH.user&&p===AUTH.pass){
+    document.getElementById('login-overlay').style.display='none';
+    sessionStorage.setItem('yfs-auth','1');
+  }else{
+    err.textContent='帳號或密碼錯誤';
+    document.getElementById('login-pass').value='';
+    setTimeout(()=>{err.textContent='';},3000);
+  }
+}
+// 已登入則直接跳過
+if(sessionStorage.getItem('yfs-auth')==='1'){
+  document.getElementById('login-overlay').style.display='none';
+}
+// 自動 focus 帳號欄
+setTimeout(()=>{
+  const el=document.getElementById('login-user');
+  if(el&&document.getElementById('login-overlay').style.display!=='none')el.focus();
+},100);
 </script>
 </body>
 </html>
