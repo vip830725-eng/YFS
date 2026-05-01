@@ -409,7 +409,7 @@ tr:hover td{background:#fafaf8;}
 // ══════════════════════════════════════
 // 資料與狀態
 // ══════════════════════════════════════
-const FIXED_API='https://script.google.com/macros/s/AKfycbx6zl1IfZoIjB1AK06QHvUoUqSkX2JpLIzLxezAj4s8w26pvlOaZ1RGUVGkf-86ZPYG/exec';
+const FIXED_API='https://script.google.com/macros/s/AKfycbw4jqwaG14LwCmPWKnQa4trV1kdZIN_8f2Xu1z-4zS2DMxCpQSp2FpQ8gWNifKcwiR1/exec';
 let API=FIXED_API;
 let purchases=[], expenses=[], PRODS=[], suppliers={purchase:[],expense:[]};
 let linked=[], editPurchaseId=null, editExpenseId=null, editSupId=null, editSupType=null;
@@ -1313,22 +1313,15 @@ async function parseInvoicePhoto(input){
   });
 
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:file.type||'image/jpeg',data:base64}},
-          {type:'text',text:'這是一張貨單或進貨單，請讀取裡面的品項資料，只回傳純 JSON 不要有其他文字：{"supplier":"廠商名稱或null","date":"YYYY-MM-DD格式或null","items":[{"name":"品名","qty":數量,"unit":"公斤或台斤或件","price":單價或null}]}'}
-        ]}]
-      })
-    });
-    const data=await resp.json();
-    const text=data.content?.[0]?.text||'';
-    const clean=text.replace(/```json|```/g,'').trim();
-    const parsed=JSON.parse(clean);
+    // 透過 Apps Script 呼叫 Claude API（避免跨域問題）
+    const url=new URL(API);
+    url.searchParams.set('action','parseInvoice');
+    url.searchParams.set('imageData',base64);
+    url.searchParams.set('mimeType',file.type||'image/jpeg');
+    const resp=await fetch(url.toString());
+    const json=await resp.json();
+    if(!json.ok)throw new Error(json.error||'解析失敗');
+    const parsed=json.data;
 
     if(parsed.supplier){
       const supEl=document.getElementById('i-sup');
