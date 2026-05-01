@@ -1302,26 +1302,49 @@ async function parseInvoicePhoto(input){
   const status=document.getElementById('parse-status');
   preview.style.display='block';
   img.src=URL.createObjectURL(file);
-  status.textContent='⏳ AI 解析中，請稍候...';
+  status.textContent='⏳ 壓縮圖片中...';
   status.style.color='#888';
+  input.disabled=true; // 防重複點擊
 
+  // 壓縮圖片到 1024px 寬以內，避免 base64 過大
   const base64=await new Promise((res,rej)=>{
     const reader=new FileReader();
-    reader.onload=()=>res(reader.result.split(',')[1]);
     reader.onerror=()=>rej(new Error('讀取失敗'));
+    reader.onload=()=>{
+      const image=new Image();
+      image.onerror=()=>rej(new Error('圖片載入失敗'));
+      image.onload=()=>{
+        const MAX=1024;
+        let w=image.width,h=image.height;
+        if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+        const canvas=document.createElement('canvas');
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(image,0,0,w,h);
+        res(canvas.toDataURL('image/jpeg',0.8).split(',')[1]);
+      };
+      image.src=reader.result;
+    };
     reader.readAsDataURL(file);
   });
 
+  console.log('[拍照] base64 長度:', base64.length, '≈', Math.round(base64.length*0.75/1024), 'KB');
+
   try{
-    // 透過 Apps Script 呼叫 Claude API（避免跨域問題）
-    const url=new URL(API);
-    url.searchParams.set('action','parseInvoice');
-    url.searchParams.set('imageData',base64);
-    url.searchParams.set('mimeType',file.type||'image/jpeg');
-    const resp=await fetch(url.toString());
-    const json=await resp.json();
+    status.textContent='⏳ AI 解析中，請稍候...';
+    // 透過 Apps Script 呼叫 Claude API（POST 避免 URL 長度限制）
+    const resp=await fetch(API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'parseInvoice',imageData:base64,mimeType:file.type||'image/jpeg'})
+    });
+    const rawText=await resp.text();
+    console.log('[拍照] HTTP狀態:', resp.status);
+    console.log('[拍照] 後端回傳原始內容:', rawText);
+    let json;
+    try{ json=JSON.parse(rawText); }catch(pe){ throw new Error('後端回傳非 JSON：'+rawText.slice(0,200)); }
     if(!json.ok)throw new Error(json.error||'解析失敗');
     const parsed=json.data;
+    console.log('[拍照] 解析結果:', parsed);
 
     if(parsed.supplier){
       const supEl=document.getElementById('i-sup');
@@ -1355,11 +1378,13 @@ async function parseInvoicePhoto(input){
       status.style.color='#2d7d46';
     }
   }catch(e){
-    status.textContent='❌ 解析失敗，請手動輸入';
+    status.textContent='❌ '+e.message;
     status.style.color='#c0392b';
-    console.error(e);
+    console.error('[拍照] 錯誤:', e.message, e);
+  }finally{
+    input.disabled=false; // 恢復按鈕
+    input.value='';
   }
-  input.value='';
 }
 
 function calcAmt(){} // 舊函數保留避免錯誤
