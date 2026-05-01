@@ -1331,17 +1331,19 @@ async function parseInvoicePhoto(input){
 
   try{
     status.textContent='⏳ AI 解析中，請稍候...';
-    // 透過 Apps Script 呼叫 Claude API（POST 避免 URL 長度限制）
-    const resp=await fetch(API,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'parseInvoice',imageData:base64,mimeType:file.type||'image/jpeg'})
-    });
+    // URLSearchParams = simple request，不觸發 CORS preflight
+    const formData=new URLSearchParams();
+    formData.append('action','parseInvoice');
+    formData.append('imageData',base64);
+    formData.append('mimeType',file.type||'image/jpeg');
+    console.log('[拍照] 送出 POST 到 Apps Script');
+    const resp=await fetch(API,{method:'POST',body:formData});
     const rawText=await resp.text();
-    console.log('[拍照] HTTP狀態:', resp.status);
+    console.log('[拍照] HTTP 狀態:', resp.status);
     console.log('[拍照] 後端回傳原始內容:', rawText);
     let json;
     try{ json=JSON.parse(rawText); }catch(pe){ throw new Error('後端回傳非 JSON：'+rawText.slice(0,200)); }
+    console.log('[拍照] 後端回傳:', json);
     if(!json.ok)throw new Error(json.error||'解析失敗');
     const parsed=json.data;
     console.log('[拍照] 解析結果:', parsed);
