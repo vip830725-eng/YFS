@@ -87,6 +87,7 @@ tr:hover td{background:#fafaf8;}
 .edit-row td{background:#f0f6ff!important;}
 .edit-row-e td{background:#f0fff4!important;}
 @media(max-width:600px){.g4{grid-template-columns:1fr 1fr;}.g3{grid-template-columns:1fr 1fr;}.mcards{grid-template-columns:1fr 1fr;}}
+@media(max-width:400px){.g2{grid-template-columns:1fr;}#payment-date-wrap{flex-wrap:wrap;}}
 </style>
 </head>
 <body>
@@ -151,9 +152,20 @@ tr:hover td{background:#fafaf8;}
     <button class="btn btn-o" onclick="addItem()" style="margin-bottom:12px;">＋ 新增品項</button>
 
     <!-- 合計 -->
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid #eee;margin-bottom:10px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid #eee;margin-bottom:0;">
       <span style="font-size:13px;color:#888;">本張合計</span>
       <span style="font-size:18px;font-weight:700;color:#185FA5;" id="total-amt">$0</span>
+    </div>
+
+    <!-- 付款資訊（整張單共用）-->
+    <div style="padding:8px 0 10px;border-bottom:1px solid #eee;margin-bottom:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+        <input type="checkbox" id="paidCheckbox" onchange="togglePaymentDate(this)"> 已付款
+      </label>
+      <div id="payment-date-wrap" style="display:none;align-items:center;gap:6px;">
+        <span style="font-size:13px;color:#888;white-space:nowrap;">付款日：</span>
+        <input type="date" id="paymentDateInput" style="width:auto;font-size:13px;padding:5px 8px;border:1px solid #ccc;border-radius:6px;outline:none;"/>
+      </div>
     </div>
 
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
@@ -940,7 +952,7 @@ let itemIdCounter=0;
 
 function addItem(){
   const id=++itemIdCounter;
-  items.push({id,name:'',priceTJ:0,priceKG:0,qty:0,unit:'kg',amt:0,linked:[],note:''});
+  items.push({id,name:'',priceTJ:0,priceKG:0,qty:0,unit:'kg',amt:0,linked:[],note:'',origin:'',brandFactory:''});
   renderItems();
   // focus 到新品項的品名
   setTimeout(()=>{
@@ -1005,6 +1017,11 @@ function updateTotal(){
   document.getElementById('total-amt').textContent='$'+Math.round(tot).toLocaleString('zh-TW');
 }
 
+function togglePaymentDate(cb){
+  const wrap=document.getElementById('payment-date-wrap');
+  wrap.style.display=cb.checked?'flex':'none';
+}
+
 function renderItems(){
   const el=document.getElementById('item-list');
   if(!items.length){
@@ -1057,6 +1074,16 @@ function renderItems(){
           oninput="updateItemField(${item.id},'note',this.value)"/>
       </div>
       <div></div>
+    </div>
+    <div class="g2" style="margin-bottom:8px;">
+      <div><label class="fl">產地</label>
+        <input id="origin${item.id}" value="${esc(item.origin||'')}" placeholder="例：美國、台灣、加拿大"
+          oninput="updateItemField(${item.id},'origin',this.value)"/>
+      </div>
+      <div><label class="fl">品牌-廠號</label>
+        <input id="brandFactory${item.id}" value="${esc(item.brandFactory||'')}" placeholder="例：Swift-P995"
+          oninput="updateItemField(${item.id},'brandFactory',this.value)"/>
+      </div>
     </div>
     <div><label class="fl">連結商品（可多選）</label>
       <div class="sb"><input id="it-lk-${item.id}" placeholder="搜尋商品表..."
@@ -1241,6 +1268,8 @@ async function submitPurchase(){
   const validItems=items.filter(x=>x.name&&x.priceKG&&x.qty);
   if(!validItems.length){msgShow('p-msg','請至少填一筆品名、單價、數量',false);return;}
   const baseTs=Date.now();
+  const paid=document.getElementById('paidCheckbox')?.checked||false;
+  const paymentDate=document.getElementById('paymentDateInput')?.value||'';
   const rows=[];
   for(let i=0;i<validItems.length;i++){
     const item=validItems[i];
@@ -1248,7 +1277,9 @@ async function submitPurchase(){
     const amt=item.priceKG*kg;
     const row={id:baseTs+i,date,name:item.name,supplier:sup,
       price:item.priceKG,priceTJ:item.priceTJ,qty:kg,amount:amt,
-      note:item.note,linked:[...item.linked]};
+      note:item.note,linked:[...item.linked],
+      origin:item.origin||'',brand_factory:item.brandFactory||'',
+      paid,payment_date:paymentDate};
     purchases.push(row);
     saveNameHist(item.name);
     rows.push(row);
@@ -1285,6 +1316,12 @@ function clearItems(){
   document.getElementById('i-date').value=today;
   document.getElementById('i-sup').value='';
   document.getElementById('total-amt').textContent='$0';
+  const paidCb=document.getElementById('paidCheckbox');
+  if(paidCb)paidCb.checked=false;
+  const dateWrap=document.getElementById('payment-date-wrap');
+  if(dateWrap)dateWrap.style.display='none';
+  const dateInput=document.getElementById('paymentDateInput');
+  if(dateInput)dateInput.value='';
   addItem();
 }
 
@@ -1356,18 +1393,25 @@ async function parseInvoicePhoto(input){
       parsed.items.forEach((d,i)=>{
         const item=items[i];if(!item)return;
         item.name=d.name||'';
-        item.unit=d.unit==='台斤'?'tj':'kg';
-        item.priceKG=item.unit==='tj'?(d.price||0)/0.6:(d.price||0);
-        item.priceTJ=item.unit==='tj'?(d.price||0):+((d.price||0)*0.6).toFixed(2);
+        item.unit='kg';
         item.qty=d.qty||0;
-        item.amt=item.priceKG*(item.unit==='tj'?item.qty*0.6:item.qty);
+        item.priceKG=item.qty?+(d.amount/item.qty).toFixed(2):0;
+        item.priceTJ=+((item.priceKG||0)*0.6).toFixed(2);
+        item.amt=d.amount||0;
+        item.origin=d.origin||'';
+        item.brandFactory=d.brand_factory||'';
+        item.note=d.note||'';
         const k=item.id;
         const s=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v;};
         s(`it-name-${k}`,item.name);
         s(`it-pkg-${k}`,item.priceKG||'');
         s(`it-ptj-${k}`,item.priceTJ||'');
         s(`it-qty-${k}`,item.qty||'');
-        const uEl=document.getElementById(`it-unit-${k}`);if(uEl)uEl.value=item.unit;
+        s(`it-amt-${k}`,item.amt||'');
+        const uEl=document.getElementById(`it-unit-${k}`);if(uEl)uEl.value='kg';
+        const oEl=document.getElementById(`origin${k}`);if(oEl)oEl.value=item.origin;
+        const bEl=document.getElementById(`brandFactory${k}`);if(bEl)bEl.value=item.brandFactory;
+        const nEl=document.getElementById(`it-note-${k}`);if(nEl)nEl.value=item.note;
         autoFillLinkedForItem(k,item.name);
       });
       updateTotal();
