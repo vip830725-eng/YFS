@@ -91,30 +91,25 @@ tr:hover td{background:#fafaf8;}
 </head>
 <body>
 
-<!-- 登入遮罩 -->
-<div id="login-overlay" style="display:none;">
-  <div style="background:#fff;border-radius:14px;padding:40px 36px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,.3);">
-    <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-size:28px;margin-bottom:8px;">🥩</div>
-      <div style="font-size:18px;font-weight:600;color:#1a1a1a;">永豐順肉品</div>
-      <div style="font-size:12px;color:#888;margin-top:4px;">進貨管理系統</div>
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">帳號</label>
-      <input id="login-user" type="text" placeholder="請輸入帳號" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:7px;font-size:14px;outline:none;" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
-    </div>
-    <div style="margin-bottom:20px;">
-      <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">密碼</label>
-      <input id="login-pass" type="password" placeholder="請輸入密碼" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:7px;font-size:14px;outline:none;" onkeydown="if(event.key==='Enter')doLogin()"/>
-    </div>
-    <button onclick="doLogin()" style="width:100%;padding:10px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">登入</button>
-    <div id="login-err" style="color:#c0392b;font-size:12px;text-align:center;margin-top:10px;height:16px;"></div>
+<div id="loginScreen" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:white; z-index:9999; display:none; align-items:center; justify-content:center;">
+  <div style="width:320px; padding:32px; border:1px solid #ddd; border-radius:12px;">
+    <h2 style="text-align:center; margin-bottom:24px;">永豐順進貨管理系統</h2>
+    <input id="loginAccount" type="text" placeholder="帳號"
+           style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+    <input id="loginPassword" type="password" placeholder="密碼"
+           style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+    <label style="display:block; margin-bottom:16px; font-size:14px;">
+      <input type="checkbox" id="rememberAccount"> 記住帳號
+    </label>
+    <button id="loginBtn" style="width:100%; padding:12px; background:#6b46c1; color:white; border:none; border-radius:6px; font-size:16px; cursor:pointer;">登入</button>
+    <div id="loginError" style="color:red; margin-top:12px; text-align:center; min-height:20px;"></div>
   </div>
 </div>
 
 <div class="topbar">
   <h1>🥩 永豐順肉品｜進貨管理系統</h1>
   <div class="sync"><div class="dot" id="dot"></div><span id="sync-txt">未設定資料庫</span></div>
+  <button onclick="if(confirm('確定登出嗎？')){localStorage.removeItem('loginStatus');location.reload();}" style="margin-left:auto; padding:6px 16px; background:#e53e3e; color:white; border:none; border-radius:6px; cursor:pointer;">登出</button>
 </div>
 <div class="apibar">
   <span style="font-size:12px;color:#888;white-space:nowrap;">資料庫網址：</span>
@@ -2347,30 +2342,38 @@ document.getElementById('e-sup').addEventListener('input',showBank);
 document.getElementById('e-s').addEventListener('change',renderExpense);
 document.getElementById('e-e').addEventListener('change',renderExpense);
 
-// ── 登入 ──
-const AUTH={user:'YFS',pass:'23028003'};
-function doLogin(){
-  const u=document.getElementById('login-user').value.trim();
-  const p=document.getElementById('login-pass').value;
-  const err=document.getElementById('login-err');
-  if(u===AUTH.user&&p===AUTH.pass){
-    document.getElementById('login-overlay').style.display='none';
-    sessionStorage.setItem('yfs-auth','1');
-  }else{
-    err.textContent='帳號或密碼錯誤';
-    document.getElementById('login-pass').value='';
-    setTimeout(()=>{err.textContent='';},3000);
+(function checkLogin(){
+  if (localStorage.getItem('loginStatus') !== 'true') {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
   }
-}
-// 已登入則直接跳過
-if(sessionStorage.getItem('yfs-auth')==='1'){
-  document.getElementById('login-overlay').style.display='none';
-}
-// 自動 focus 帳號欄
-setTimeout(()=>{
-  const el=document.getElementById('login-user');
-  if(el&&document.getElementById('login-overlay').style.display!=='none')el.focus();
-},100);
+  const saved = localStorage.getItem('savedAccount');
+  if (saved) {
+    document.getElementById('loginAccount').value = saved;
+    document.getElementById('rememberAccount').checked = true;
+  }
+  document.getElementById('loginBtn').addEventListener('click', function(){
+    const acc = document.getElementById('loginAccount').value.trim();
+    const pwd = document.getElementById('loginPassword').value;
+    const remember = document.getElementById('rememberAccount').checked;
+    const errEl = document.getElementById('loginError');
+    if (acc === 'YFS' && pwd === '23028003') {
+      localStorage.setItem('loginStatus', 'true');
+      if (remember) localStorage.setItem('savedAccount', acc);
+      else localStorage.removeItem('savedAccount');
+      document.getElementById('loginScreen').style.display = 'none';
+      document.body.style.overflow = '';
+      errEl.textContent = '';
+    } else {
+      errEl.textContent = '帳號或密碼錯誤';
+    }
+  });
+  ['loginAccount','loginPassword'].forEach(id=>{
+    document.getElementById(id).addEventListener('keydown', function(e){
+      if (e.key === 'Enter') document.getElementById('loginBtn').click();
+    });
+  });
+})();
 </script>
 </body>
 </html>
