@@ -591,30 +591,55 @@ const fmt=n=>'$'+Math.round(Number(n)||0).toLocaleString('zh-TW');
 const fmtD=n=>'$'+(Number(n)||0).toFixed(2);
 const esc=s=>String(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
 
-function normDate(d){
+// 傳回指定年月的最後一天字串 "YYYY-MM-DD"（純算術，不用 Date 物件）
+function lastDayStr(y,m){
+  const dim=[0,31,28,31,30,31,30,31,31,30,31,30,31];
+  if(m===2&&(y%4===0&&(y%100!==0||y%400===0)))dim[2]=29;
+  return `${y}-${String(m).padStart(2,'0')}-${String(dim[m]).padStart(2,'0')}`;
+}
+// 將任何日期格式轉成 "YYYY-MM-DD"，全程純字串不解析為 Date（避免 UTC 時差）
+function toDateStr(d){
   if(!d)return '';
   const s=String(d).trim();
-  // Google Sheets 序列日期（5位數）
+  if(!s)return '';
+  // Google Sheets 序列日期（5 位數整數）
   if(/^\d{5}$/.test(s)){
-    const base=new Date(1899,11,30);
+    const base=new Date(1899,11,30);          // 本地時間建構，safe
     base.setDate(base.getDate()+parseInt(s));
-    // 用本地時間避免 UTC 時差
-    const y=base.getFullYear();
-    const m=String(base.getMonth()+1).padStart(2,'0');
-    const dd=String(base.getDate()).padStart(2,'0');
-    return `${y}-${m}-${dd}`;
+    return `${base.getFullYear()}-${String(base.getMonth()+1).padStart(2,'0')}-${String(base.getDate()).padStart(2,'0')}`;
   }
-  // Date 物件（GAS 回傳的）
-  if(d instanceof Date || (typeof d==='object' && d!==null)){
-    const dt=new Date(d);
-    // 加上時區偏移，避免 UTC 轉換跑到前一天
-    const offset=dt.getTimezoneOffset()*60000;
-    const local=new Date(dt.getTime()-offset);
-    return local.toISOString().slice(0,10);
+  // ISO 字串（"2026-04-30T16:00:00.000Z" 或 "+08:00"）
+  if(s.includes('T')){
+    const[dp,tp]=s.split('T');
+    const[y,mo,da]=dp.split('-').map(Number);
+    const hh=parseInt(tp)||0;
+    // 解析字串本身的時區偏移（分鐘）
+    let tzMins=0;
+    if(!tp.endsWith('Z')){const tz=tp.match(/([+-])(\d{2}):(\d{2})$/);if(tz)tzMins=(parseInt(tz[2])*60+parseInt(tz[3]))*(tz[1]==='+'?1:-1);}
+    // 轉換成台灣時間（UTC+8）: tw小時 = 字串小時 - 字串時區 + 8
+    const twH=hh-tzMins/60+8;
+    let day=da,month=mo,year=y;
+    if(twH>=24){
+      const dim=[0,31,28,31,30,31,30,31,31,30,31,30,31];
+      if(month===2&&(year%4===0&&(year%100!==0||year%400===0)))dim[2]=29;
+      day++;if(day>dim[month]){day=1;month++;if(month>12){month=1;year++;}}
+    }else if(twH<0){
+      day--;
+      if(day<1){
+        month--;if(month<1){month=12;year--;}
+        const dim=[0,31,28,31,30,31,30,31,31,30,31,30,31];
+        if(month===2&&(year%4===0&&(year%100!==0||year%400===0)))dim[2]=29;
+        day=dim[month];
+      }
+    }
+    return `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
   }
-  // 已是 YYYY/MM/DD 或 YYYY-MM-DD 字串
+  // Date 物件 fallback（用本地方法，不呼叫 toISOString）
+  if(d instanceof Date)return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  // 已是 YYYY/MM/DD 或 YYYY-MM-DD
   return s.replace(/\//g,'-').slice(0,10);
 }
+const normDate=toDateStr;
 
 function msgShow(id,txt,ok=true){
   const el=document.getElementById(id);
@@ -1574,7 +1599,7 @@ function renderHistory(){
   </tr></thead><tbody>${f.map(r=>{
     const id=r.id;
     const isPaid=r.paid===true||r.paid==='TRUE'||r.paid==='true';
-    const payDate=r.payment_date?String(r.payment_date).replace(/\//g,'-').slice(0,10):'';
+    const payDate=toDateStr(r.payment_date);
     if(String(editPurchaseId)===String(id)){
       const ePriceTJ=r.priceTJ||(r.price*0.6);
       const eQtyTJ=(r.qty||0)/0.6;
@@ -1901,7 +1926,7 @@ function renderExpense(){
 function setThisMonth(){
   const y=new Date().getFullYear(),m=String(new Date().getMonth()+1).padStart(2,'0');
   document.getElementById('r-s').value=`${y}-${m}-01`;
-  document.getElementById('r-e').value=new Date(y,new Date().getMonth()+1,0).toISOString().slice(0,10);
+  document.getElementById('r-e').value=lastDayStr(y,new Date().getMonth()+1);
 }
 
 function getReportData(){
@@ -2267,7 +2292,7 @@ function clearCost(){
 function setThisMonthCost(){
   const now=new Date(),y=now.getFullYear(),m=String(now.getMonth()+1).padStart(2,'0');
   document.getElementById('c-start').value=`${y}-${m}-01`;
-  document.getElementById('c-end').value=new Date(y,now.getMonth()+1,0).toISOString().slice(0,10);
+  document.getElementById('c-end').value=lastDayStr(y,now.getMonth()+1);
   const q=document.getElementById('c-search').value;
   if(q)showCost(q);
 }
@@ -2435,7 +2460,7 @@ setThisMonth();
   const el1=document.getElementById('c-start')||document.getElementById('c-s');
   const el2=document.getElementById('c-end')||document.getElementById('c-e');
   if(el1)el1.value=`${y}-${m}-01`;
-  if(el2)el2.value=new Date(y,now.getMonth()+1,0).toISOString().slice(0,10);
+  if(el2)el2.value=lastDayStr(y,now.getMonth()+1);
 })();
 // 自動連線
 if(API){setSS('loading','連線中...');testApi();}
