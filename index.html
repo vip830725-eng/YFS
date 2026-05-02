@@ -103,14 +103,9 @@ tr:hover td{background:#fafaf8;}
       <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">帳號</label>
       <input id="login-user" type="text" placeholder="請輸入帳號" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:7px;font-size:14px;outline:none;" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
     </div>
-    <div style="margin-bottom:12px;">
+    <div style="margin-bottom:20px;">
       <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">密碼</label>
       <input id="login-pass" type="password" placeholder="請輸入密碼" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:7px;font-size:14px;outline:none;" onkeydown="if(event.key==='Enter')doLogin()"/>
-    </div>
-    <div style="margin-bottom:16px;">
-      <label style="font-size:12px;color:#666;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
-        <input type="checkbox" id="rememberAccount" style="width:14px;height:14px;cursor:pointer;"> 記住帳號
-      </label>
     </div>
     <button onclick="doLogin()" style="width:100%;padding:10px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">登入</button>
     <div id="login-err" style="color:#c0392b;font-size:12px;text-align:center;margin-top:10px;height:16px;"></div>
@@ -1336,25 +1331,21 @@ async function parseInvoicePhoto(input){
 
   try{
     status.textContent='⏳ AI 解析中，請稍候...';
-    // Content-Type: text/plain = simple request，不觸發 CORS preflight
-    // body 放完整 JSON，Apps Script 從 e.postData.contents 讀取
-    const bodyStr=JSON.stringify({action:'parseInvoice',imageData:base64,mimeType:file.type||'image/jpeg'});
-    console.log('[拍照] 送出 POST 到 Apps Script，body 長度:', bodyStr.length, 'bytes');
-    const resp=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:bodyStr});
+    // URLSearchParams = simple request，不觸發 CORS preflight
+    const formData=new URLSearchParams();
+    formData.append('action','parseInvoice');
+    formData.append('imageData',base64);
+    formData.append('mimeType',file.type||'image/jpeg');
+    console.log('[拍照] 送出 POST 到 Apps Script');
+    const resp=await fetch(API,{method:'POST',body:formData});
     const rawText=await resp.text();
     console.log('[拍照] HTTP 狀態:', resp.status);
     console.log('[拍照] 後端回傳原始內容:', rawText);
-    if(!rawText)throw new Error('後端回傳空白（請確認 Apps Script 已更新並重新部署）');
     let json;
-    try{ json=JSON.parse(rawText); }catch(pe){ throw new Error('後端回傳非 JSON：'+rawText.slice(0,300)); }
-    console.log('[拍照] json.ok:', json.ok, '| json.data 型別:', typeof json.data);
-    console.log('[拍照] 後端回傳完整:', json);
+    try{ json=JSON.parse(rawText); }catch(pe){ throw new Error('後端回傳非 JSON：'+rawText.slice(0,200)); }
+    console.log('[拍照] 後端回傳:', json);
     if(!json.ok)throw new Error(json.error||'解析失敗');
-    // json.data 有時是字串（Apps Script 雙重序列化），做保護性 parse
-    let parsed=json.data;
-    if(typeof parsed==='string'){
-      try{ parsed=JSON.parse(parsed); }catch(pe){ throw new Error('data 欄位解析失敗：'+parsed.slice(0,200)); }
-    }
+    const parsed=json.data;
     console.log('[拍照] 解析結果:', parsed);
 
     if(parsed.supplier){
@@ -2362,10 +2353,7 @@ function doLogin(){
   const u=document.getElementById('login-user').value.trim();
   const p=document.getElementById('login-pass').value;
   const err=document.getElementById('login-err');
-  const remember=document.getElementById('rememberAccount').checked;
   if(u===AUTH.user&&p===AUTH.pass){
-    if(remember){localStorage.setItem('savedAccount',u);}
-    else{localStorage.removeItem('savedAccount');}
     document.getElementById('login-overlay').style.display='none';
     sessionStorage.setItem('yfs-auth','1');
   }else{
@@ -2378,16 +2366,6 @@ function doLogin(){
 if(sessionStorage.getItem('yfs-auth')==='1'){
   document.getElementById('login-overlay').style.display='none';
 }
-// 載入已記住的帳號
-(function(){
-  const saved=localStorage.getItem('savedAccount');
-  if(saved){
-    const el=document.getElementById('login-user');
-    if(el)el.value=saved;
-    const cb=document.getElementById('rememberAccount');
-    if(cb)cb.checked=true;
-  }
-})();
 // 自動 focus 帳號欄
 setTimeout(()=>{
   const el=document.getElementById('login-user');
