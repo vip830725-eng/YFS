@@ -1570,9 +1570,11 @@ function renderHistory(){
   const el=document.getElementById('h-tbl');
   if(!f.length){el.innerHTML='<div class="empty">無符合進貨記錄</div>';return;}
   el.innerHTML=`<table><thead><tr>
-    <th>日期</th><th>品名</th><th>供應商</th><th>單價(元/kg)</th><th>單價(元/台斤)</th><th>數量(kg)</th><th>數量(台斤)</th><th>金額</th><th>連結商品</th><th>備註</th><th>操作</th>
+    <th>日期</th><th>品名</th><th>供應商</th><th>單價(元/kg)</th><th>單價(元/台斤)</th><th>數量(kg)</th><th>數量(台斤)</th><th>金額</th><th>連結商品</th><th>備註</th><th>產地</th><th>品牌廠</th><th>付款</th><th>付款日</th><th>操作</th>
   </tr></thead><tbody>${f.map(r=>{
     const id=r.id;
+    const isPaid=r.paid===true||r.paid==='TRUE'||r.paid==='true';
+    const payDate=r.payment_date?String(r.payment_date).replace(/\//g,'-').slice(0,10):'';
     if(String(editPurchaseId)===String(id)){
       const ePriceTJ=r.priceTJ||(r.price*0.6);
       const eQtyTJ=(r.qty||0)/0.6;
@@ -1604,6 +1606,10 @@ function renderHistory(){
           </div>
         </td>
         <td><input id="ep-no-${id}" value="${esc(r.note||'')}" style="width:80px;font-size:12px;"/></td>
+        <td style="font-size:11px;color:#888;">${r.origin||''}</td>
+        <td style="font-size:11px;color:#888;">${r.brand_factory||''}</td>
+        <td style="font-size:11px;">${isPaid?'<span style="color:#2d7d46;">✓已付</span>':'<span style="color:#c0392b;">未付</span>'}</td>
+        <td style="font-size:11px;color:#888;">${payDate}</td>
         <td style="white-space:nowrap;">
           <button class="btn-s" style="background:#185FA5;color:#fff;border:none;margin-right:3px;" onclick="saveEditP('${id}')">儲存</button>
           <button class="btn-s" onclick="cancelEditP()">取消</button>
@@ -1633,6 +1639,10 @@ function renderHistory(){
       <td style="font-weight:600;">${fmt(r.amount)}</td>
       <td style="max-width:160px;">${lk}</td>
       <td style="font-size:11px;color:#888;">${r.note||''}</td>
+      <td style="font-size:11px;color:#888;">${r.origin||''}</td>
+      <td style="font-size:11px;color:#888;">${r.brand_factory||''}</td>
+      <td style="font-size:11px;">${isPaid?'<span style="color:#2d7d46;">✓已付</span>':'<span style="color:#c0392b;">未付</span>'}</td>
+      <td style="font-size:11px;color:#888;">${payDate}</td>
       <td style="white-space:nowrap;">
         <button class="btn-s" onclick="startEditP('${id}')" style="margin-right:3px;">編輯</button>
         <button class="btn-s btn-del" onclick="delPurchase('${id}')">刪除</button>
@@ -2418,9 +2428,6 @@ loadLocal();
 document.getElementById('e-date').value=today;
 document.getElementById('e-s').value=today.slice(0,7)+'-01';
 document.getElementById('e-e').value=today;
-const nm=new Date(),hy=nm.getFullYear(),hm=String(nm.getMonth()+1).padStart(2,'0');
-document.getElementById('h-s').value=`${hy}-${hm}-01`;
-document.getElementById('h-e').value=today;
 setThisMonth();
 // 平均成本預設本月
 (function(){
