@@ -197,7 +197,7 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
         <div class="sb"><input id="it-name-1" value="" placeholder="搜尋品名..." oninput="itNameSearch(1,this.value);updateItemName(1,this.value)" onfocus="itNameSearch(1,this.value)" onkeydown="itNameKeyNav(event,1)" onblur="updateItemName(1,this.value)" autocomplete="off">
         <div class="dd" id="it-dd-1"><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;小里肌&#39;)">小里肌</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;後腱&#39;)">後腱</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;雞腿-立大&#39;)">雞腿-立大</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;小排-復進&#39;)">小排-復進</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;三枚-法&#39;)">三枚-法</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;大排-讚&#39;)">大排-讚</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;中式香腸#8(台斤)-銓&#39;)">中式香腸#8(台斤)-銓</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;小排-美18079&#39;)">小排-美18079</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;菊花肉(大)-加-7&#39;)">菊花肉(大)-加-7</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;大腸(保)&#39;)">大腸(保)</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;國產中肉R(冷凍)-銓(H)&#39;)">國產中肉R(冷凍)-銓(H)</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;國產東坡肉原料(900G-1100G)-銓(12入/箱)&#39;)">國產東坡肉原料(900G-1100G)-銓(12入/箱)</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;美國小德腳(壓裝)Swift P995~13.6KG&#39;)">美國小德腳(壓裝)Swift P995~13.6KG</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;棒腿#2.5~津~15KG(箱裝)&#39;)">棒腿#2.5~津~15KG(箱裝)</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;加拿大大腸頭(壓裝)Olymel P10~10KG&#39;)">加拿大大腸頭(壓裝)Olymel P10~10KG</div></div></div>
       </div>
-      <div><label class="fl">台斤單價（元/台斤）</label>
+      <div><label class="fl">台斤/盒/粒 單價</label>
         <input type="number" id="it-ptj-1" value="" placeholder="0" min="0" step="0.01" oninput="updateItemField(1,&#39;priceTJ&#39;,parseFloat(this.value)||0)">
       </div>
       <div><label class="fl">公斤單價（元/公斤）</label>
@@ -2562,6 +2562,10 @@ function removeItem(id){
   updateTotal();
 }
 
+function updateCustomUnit(id,val){
+  const item=items.find(x=>x.id===id);
+  if(item){item.customUnit=val;}
+}
 function updateItemField(id,field,val){
   const item=items.find(x=>x.id===id);
   if(!item)return;
@@ -2576,10 +2580,14 @@ function updateItemField(id,field,val){
     const el=document.getElementById(`it-ptj-${id}`);
     if(el)el.value=item.priceTJ||'';
   }
-  // 計算金額（用公斤單價 × 數量kg）
+  // 計算金額
   if(field==='priceTJ'||field==='priceKG'||field==='qty'||field==='unit'){
+    // 台斤換算公斤，其他單位直接用數量
     const kg=item.unit==='tj'?item.qty*0.6:item.qty;
-    item.amt=item.priceKG&&kg?+(item.priceKG*kg).toFixed(2):0;
+    // 盒/件/粒/自訂用台斤單價欄位（即元/單位）直接算
+    const isWeight=item.unit==='kg'||item.unit==='tj';
+    const price=isWeight?item.priceKG:item.priceTJ;
+    item.amt=price&&item.qty?+(price*item.qty).toFixed(2):0;
     const amtEl=document.getElementById(`it-amt-${id}`);
     if(amtEl)amtEl.value=item.amt||'';
   }
@@ -2640,7 +2648,7 @@ function renderItems(){
           autocomplete="off"/>
         <div class="dd" id="it-dd-${item.id}"></div></div>
       </div>
-      <div><label class="fl">台斤單價（元/台斤）</label>
+      <div><label class="fl">台斤/盒/粒 單價</label>
         <input type="number" id="it-ptj-${item.id}" value="${item.priceTJ||''}" placeholder="0" min="0" step="0.01"
           oninput="updateItemField(${item.id},'priceTJ',parseFloat(this.value)||0)"/>
       </div>
@@ -2655,7 +2663,12 @@ function renderItems(){
           <select id="it-unit-${item.id}" style="width:70px;" onchange="updateItemField(${item.id},'unit',this.value)">
             <option value="kg"${item.unit==='kg'?' selected':''}>公斤</option>
             <option value="tj"${item.unit==='tj'?' selected':''}>台斤</option>
+            <option value="box"${item.unit==='box'?' selected':''}>盒</option>
+            <option value="case"${item.unit==='case'?' selected':''}>件</option>
+            <option value="grain"${item.unit==='grain'?' selected':''}>粒</option>
+            <option value="custom"${item.unit==='custom'?' selected':''}>自訂...</option>
           </select>
+          ${item.unit==='custom'?`<input id="it-unit-custom-${item.id}" value="${esc(item.customUnit||'')}" placeholder="輸入單位" style="width:70px;font-size:12px;margin-top:4px;" oninput="updateCustomUnit(${item.id},this.value)"/>`:''}
         </div>
       </div>
     </div>
@@ -2860,16 +2873,18 @@ function itRmLink(id,name){
 async function submitPurchase(){
   const date=document.getElementById('i-date').value||today;
   const sup=document.getElementById('i-sup').value.trim();
-  const validItems=items.filter(x=>x.name&&x.priceKG&&x.qty);
-  if(!validItems.length){msgShow('p-msg','請至少填一筆品名、單價、數量',false);return;}
+  const validItems=items.filter(x=>x.name&&x.qty); // 單價選填
+  if(!validItems.length){msgShow('p-msg','請至少填一筆品名、數量',false);return;}
   const baseTs=Date.now();
   const paid=document.getElementById('paidCheckbox')?.checked||false;
   const paymentDate=document.getElementById('paymentDateInput')?.value||'';
   const rows=[];
   for(let i=0;i<validItems.length;i++){
     const item=validItems[i];
-    const kg=item.unit==='tj'?item.qty*0.6:item.qty;
-    const amt=item.priceKG*kg;
+    const isWeight=item.unit==='kg'||item.unit==='tj';
+    const kg=item.unit==='tj'?item.qty*0.6:(isWeight?item.qty:item.qty);
+    const unitPrice=isWeight?item.priceKG:item.priceTJ;
+    const amt=unitPrice*item.qty;
     const row={id:baseTs+i,date,name:item.name,supplier:sup,
       price:item.priceKG,priceTJ:item.priceTJ,qty:kg,amount:amt,
       note:item.note,linked:[...item.linked],
