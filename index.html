@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<!-- saved from url=(0036)https://vip830725-eng.github.io/YFS/ -->
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>永豐順肉品｜進貨管理系統</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -130,16 +130,14 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
 .toast{position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 24px;border-radius:20px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:500;white-space:nowrap;}
 .toast.show{opacity:1;}
 </style>
-</head>
+<input type="hidden" id="_o_dbjbempljhcmhlfpfacalomonjpalpko" data-inspect-config="7"><script type="text/javascript" src="chrome-extension://dbjbempljhcmhlfpfacalomonjpalpko/scripts/inspector.js"></script></head>
 <body>
 
 <div id="loginScreen" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:white; z-index:9999; display:none; align-items:center; justify-content:center;">
   <div style="width:320px; padding:32px; border:1px solid #ddd; border-radius:12px;">
     <h2 style="text-align:center; margin-bottom:24px;">永豐順進貨管理系統</h2>
-    <input id="loginAccount" type="text" placeholder="帳號"
-           style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
-    <input id="loginPassword" type="password" placeholder="密碼"
-           style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+    <input id="loginAccount" type="text" placeholder="帳號" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+    <input id="loginPassword" type="password" placeholder="密碼" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
     <label style="display:block; margin-bottom:16px; font-size:14px;">
       <input type="checkbox" id="rememberAccount"> 記住帳號
     </label>
@@ -150,29 +148,29 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
 
 <div class="topbar">
   <h1>🥩 永豐順肉品｜進貨管理系統</h1>
-  <div class="sync"><div class="dot" id="dot"></div><span id="sync-txt">未設定資料庫</span></div>
-  <button onclick="if(confirm('確定登出嗎？')){localStorage.removeItem('loginStatus');location.reload();}" style="margin-left:auto; padding:6px 16px; background:#e53e3e; color:white; border:none; border-radius:6px; cursor:pointer;">登出</button>
+  <div class="sync"><div class="dot ok" id="dot"></div><span id="sync-txt">已連線 Google Sheets</span></div>
+  <button onclick="if(confirm(&#39;確定登出嗎？&#39;)){localStorage.removeItem(&#39;loginStatus&#39;);location.reload();}" style="margin-left:auto; padding:6px 16px; background:#e53e3e; color:white; border:none; border-radius:6px; cursor:pointer;">登出</button>
 </div>
 <div class="apibar">
   <span style="font-size:12px;color:#888;white-space:nowrap;">資料庫網址：</span>
-  <input type="text" id="api-url" placeholder="貼上 Google Apps Script 網址（https://script.google.com/macros/s/...）"/>
+  <input type="text" id="api-url" placeholder="貼上 Google Apps Script 網址（https://script.google.com/macros/s/...）">
   <button class="btn-dark btn" onclick="saveApi()">儲存連線</button>
   <button class="btn-outline btn" onclick="testApi()">測試連線</button>
   <button class="btn-outline btn" style="color:#c0392b;border-color:#e0b0b0;" onclick="clearAllData()">清除本地資料</button>
 </div>
 
-<div class="load-overlay" id="loader"><div class="spinner"></div><span id="loader-txt">讀取中...</span></div>
+<div class="load-overlay" id="loader"><div class="spinner"></div><span id="loader-txt">載入開銷記錄...</span></div>
 
 <div class="wrap">
 <div class="tabs">
-  <button class="tab on"  onclick="sw(0)">進貨單</button>
-  <button class="tab"     onclick="sw(1)">進貨記錄</button>
-  <button class="tab"     onclick="sw(2)">開銷記錄</button>
-  <button class="tab"     onclick="sw(3)">📊 報表</button>
-  <button class="tab"     onclick="sw(4)">🏭 廠商管理</button>
-  <button class="tab"     onclick="sw(5)">商品表</button>
-  <button class="tab"     onclick="sw(6)">平均成本</button>
-  <button class="tab"     onclick="sw(7)">💬 問 AI</button>
+  <button class="tab on" onclick="sw(0)">進貨單</button>
+  <button class="tab" onclick="sw(1)">進貨記錄</button>
+  <button class="tab" onclick="sw(2)">開銷記錄</button>
+  <button class="tab" onclick="sw(3)">📊 報表</button>
+  <button class="tab" onclick="sw(4)">🏭 廠商管理</button>
+  <button class="tab" onclick="sw(5)">商品表</button>
+  <button class="tab" onclick="sw(6)">平均成本</button>
+  <button class="tab" onclick="sw(7)">💬 問 AI</button>
 </div>
 
 <!-- ══ 0: 進貨單 ══ -->
@@ -180,15 +178,67 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
   <div class="card">
     <!-- 日期 + 供應商（固定，整張單共用）-->
     <div class="g2" style="margin-bottom:12px;">
-      <div><label class="fl">進貨日期</label><input type="date" id="i-date"/></div>
+      <div><label class="fl">進貨日期</label><input type="date" id="i-date"></div>
       <div><label class="fl">供應商</label>
-        <div class="sb"><input id="i-sup" placeholder="搜尋供應商..." oninput="ddSearch('i-sup','dd-sup','purchase')" onfocus="ddSearch('i-sup','dd-sup','purchase')" onkeydown="ddKeyNav(event,'dd-sup','selSup')" autocomplete="off"/>
+        <div class="sb"><input id="i-sup" placeholder="搜尋供應商..." oninput="ddSearch(&#39;i-sup&#39;,&#39;dd-sup&#39;,&#39;purchase&#39;)" onfocus="ddSearch(&#39;i-sup&#39;,&#39;dd-sup&#39;,&#39;purchase&#39;)" onkeydown="ddKeyNav(event,&#39;dd-sup&#39;,&#39;selSup&#39;)" autocomplete="off">
         <div class="dd" id="dd-sup"></div></div>
       </div>
     </div>
 
     <!-- 多品項列表 -->
-    <div id="item-list"></div>
+    <div id="item-list">
+  <div style="border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;margin-bottom:10px;background:#fafaf8;" id="item-row-1">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:12px;color:#888;font-weight:500;">品項 1</span>
+      
+    </div>
+    <div class="g4" style="margin-bottom:8px;">
+      <div><label class="fl">品名</label>
+        <div class="sb"><input id="it-name-1" value="" placeholder="搜尋品名..." oninput="itNameSearch(1,this.value);updateItemName(1,this.value)" onfocus="itNameSearch(1,this.value)" onkeydown="itNameKeyNav(event,1)" onblur="updateItemName(1,this.value)" autocomplete="off">
+        <div class="dd" id="it-dd-1"><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;小里肌&#39;)">小里肌</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;後腱&#39;)">後腱</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;雞腿-立大&#39;)">雞腿-立大</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;小排-復進&#39;)">小排-復進</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;三枚-法&#39;)">三枚-法</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;大排-讚&#39;)">大排-讚</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;中式香腸#8(台斤)-銓&#39;)">中式香腸#8(台斤)-銓</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;小排-美18079&#39;)">小排-美18079</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;菊花肉(大)-加-7&#39;)">菊花肉(大)-加-7</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;大腸(保)&#39;)">大腸(保)</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;國產中肉R(冷凍)-銓(H)&#39;)">國產中肉R(冷凍)-銓(H)</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;國產東坡肉原料(900G-1100G)-銓(12入/箱)&#39;)">國產東坡肉原料(900G-1100G)-銓(12入/箱)</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;美國小德腳(壓裝)Swift P995~13.6KG&#39;)">美國小德腳(壓裝)Swift P995~13.6KG</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;棒腿#2.5~津~15KG(箱裝)&#39;)">棒腿#2.5~津~15KG(箱裝)</div><div class="di" onmousedown="event.preventDefault();itSelName(1,&#39;加拿大大腸頭(壓裝)Olymel P10~10KG&#39;)">加拿大大腸頭(壓裝)Olymel P10~10KG</div></div></div>
+      </div>
+      <div><label class="fl">台斤單價（元/台斤）</label>
+        <input type="number" id="it-ptj-1" value="" placeholder="0" min="0" step="0.01" oninput="updateItemField(1,&#39;priceTJ&#39;,parseFloat(this.value)||0)">
+      </div>
+      <div><label class="fl">公斤單價（元/公斤）</label>
+        <input type="number" id="it-pkg-1" value="" placeholder="0" min="0" step="0.01" oninput="updateItemField(1,&#39;priceKG&#39;,parseFloat(this.value)||0)">
+      </div>
+      <div><label class="fl">數量</label>
+        <div style="display:flex;gap:4px;">
+          <input type="number" id="it-qty-1" value="" placeholder="0" min="0" step="0.01" style="flex:1;" oninput="updateItemField(1,&#39;qty&#39;,parseFloat(this.value)||0)">
+          <select id="it-unit-1" style="width:70px;" onchange="updateItemField(1,&#39;unit&#39;,this.value)">
+            <option value="kg" selected="">公斤</option>
+            <option value="tj">台斤</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="g3" style="margin-bottom:6px;">
+      <div><label class="fl">金額（自動）</label>
+        <input type="number" id="it-amt-1" value="" readonly="">
+      </div>
+      <div id="it-hint-1" style="margin-bottom:4px;"></div>
+      <div><label class="fl">備註</label>
+        <input id="it-note-1" value="" placeholder="選填" oninput="updateItemField(1,&#39;note&#39;,this.value)">
+      </div>
+      <div></div>
+    </div>
+    <div class="g2" style="margin-bottom:8px;">
+      <div><label class="fl">產地</label>
+        <input id="origin1" value="" placeholder="例：美國、台灣、加拿大" oninput="updateItemField(1,&#39;origin&#39;,this.value)">
+      </div>
+      <div><label class="fl">品牌-廠號</label>
+        <input id="brandFactory1" value="" placeholder="例：Swift-P995" oninput="updateItemField(1,&#39;brandFactory&#39;,this.value)">
+      </div>
+    </div>
+    <div><label class="fl">連結商品（可多選）</label>
+      <div class="sb"><input id="it-lk-1" placeholder="搜尋商品表..." oninput="itLkSearch(1,this.value)" onfocus="itLkSearch(1,this.value)" autocomplete="off">
+      <div class="dd" id="it-lk-dd-1"></div></div>
+      <div class="tags" id="it-lk-tags-1">
+        
+      </div>
+    </div>
+  </div></div>
 
     <!-- 新增品項按鈕 -->
     <button class="btn btn-o" onclick="addItem()" style="margin-bottom:12px;">＋ 新增品項</button>
@@ -206,7 +256,7 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
       </label>
       <div id="payment-date-wrap" style="display:none;align-items:center;gap:6px;">
         <span style="font-size:13px;color:#888;white-space:nowrap;">付款日：</span>
-        <input type="date" id="paymentDateInput" style="width:auto;font-size:13px;padding:5px 8px;border:1px solid #ccc;border-radius:6px;outline:none;"/>
+        <input type="date" id="paymentDateInput" style="width:auto;font-size:13px;padding:5px 8px;border:1px solid #ccc;border-radius:6px;outline:none;">
       </div>
     </div>
 
@@ -215,36 +265,36 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
       <button class="btn btn-o" onclick="clearItems()">清除</button>
       <label class="btn" style="background:#6c3483;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;">
         📷 拍照解析貨單
-        <input type="file" id="invoice-photo" accept="image/*" capture="environment" style="display:none;" onchange="parseInvoicePhoto(this)"/>
+        <input type="file" id="invoice-photo" accept="image/*" capture="environment" style="display:none;" onchange="parseInvoicePhoto(this)">
       </label>
       <span id="p-msg"></span>
     </div>
     <div id="photo-preview" style="display:none;margin-top:10px;">
-      <img id="preview-img" style="max-width:200px;border-radius:8px;border:1px solid #ddd;"/>
+      <img id="preview-img" style="max-width:200px;border-radius:8px;border:1px solid #ddd;">
       <div id="parse-status" style="font-size:13px;color:#888;margin-top:6px;"></div>
     </div>
   </div>
 
   <div class="mcards">
-    <div class="mcard"><div class="mcard-lbl">本月進貨筆數</div><div class="mcard-val" id="m0">-</div></div>
-    <div class="mcard"><div class="mcard-lbl">本月進貨總額</div><div class="mcard-val blue" id="m1">-</div></div>
-    <div class="mcard"><div class="mcard-lbl">品項種類</div><div class="mcard-val" id="m2">-</div></div>
-    <div class="mcard"><div class="mcard-lbl">本月開銷</div><div class="mcard-val red" id="m3">-</div></div>
-    <div class="mcard"><div class="mcard-lbl">本月總支出</div><div class="mcard-val" id="m4">-</div></div>
+    <div class="mcard"><div class="mcard-lbl">本月進貨筆數</div><div class="mcard-val" id="m0">34</div></div>
+    <div class="mcard"><div class="mcard-lbl">本月進貨總額</div><div class="mcard-val blue" id="m1">$950,750</div></div>
+    <div class="mcard"><div class="mcard-lbl">品項種類</div><div class="mcard-val" id="m2">25</div></div>
+    <div class="mcard"><div class="mcard-lbl">本月開銷</div><div class="mcard-val red" id="m3">$0</div></div>
+    <div class="mcard"><div class="mcard-lbl">本月總支出</div><div class="mcard-val" id="m4">$950,750</div></div>
   </div>
 </div>
 
 <!-- ══ 1: 進貨記錄 ══ -->
 <div class="sec" id="s1">
   <div class="sarea" style="flex-wrap:wrap;">
-    <input type="date" id="h-s" style="width:138px;" onchange="renderHistory(true)"/>
+    <input type="date" id="h-s" style="width:138px;" onchange="renderHistory(true)">
     <span style="color:#888;">－</span>
-    <input type="date" id="h-e" style="width:138px;" onchange="renderHistory(true)"/>
+    <input type="date" id="h-e" style="width:138px;" onchange="renderHistory(true)">
     <div class="sb" style="width:150px;">
-      <input id="h-sup" placeholder="所有廠商" oninput="ddHSup(this.value)" onfocus="ddHSup(this.value)" autocomplete="off" style="width:100%;"/>
+      <input id="h-sup" placeholder="所有廠商" oninput="ddHSup(this.value)" onfocus="ddHSup(this.value)" autocomplete="off" style="width:100%;">
       <div class="dd" id="dd-h-sup"></div>
     </div>
-    <input id="h-kw" placeholder="搜尋品名" style="width:130px;" oninput="renderHistory(true)"/>
+    <input id="h-kw" placeholder="搜尋品名" style="width:130px;" oninput="renderHistory(true)">
     <button class="btn btn-o" onclick="renderHistory(true)">搜尋</button>
     <button class="btn btn-b" onclick="loadAndRender()">雲端重載</button>
     <button class="btn btn-o" onclick="clearHFilter()">清除</button>
@@ -269,12 +319,661 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
     </select>
     <span style="font-size:12px;color:#888;white-space:nowrap;">連結商品：</span>
     <div class="sb" style="width:160px;">
-      <input id="h-prod" placeholder="篩選連結商品..." oninput="ddHProd(this.value)" onfocus="ddHProd(this.value)" autocomplete="off" style="width:100%;font-size:13px;"/>
+      <input id="h-prod" placeholder="篩選連結商品..." oninput="ddHProd(this.value)" onfocus="ddHProd(this.value)" autocomplete="off" style="width:100%;font-size:13px;">
       <div class="dd" id="dd-h-prod"></div>
     </div>
   </div>
-  <div class="summary-bar" id="h-bar"></div>
-  <div class="tbl-wrap" id="h-tbl"></div>
+  <div class="summary-bar" id="h-bar">共 <strong>34</strong> 筆 ／ <strong>7061.81 公斤</strong> ／ 合計 <strong>$950,750</strong></div>
+  <div class="tbl-wrap" id="h-tbl"><table><thead><tr>
+    <th style="width:28px;"><input type="checkbox" id="cb-select-all" onchange="toggleSelectAll(this.checked)" title="全選"></th>
+    <th>日期</th><th>品名</th><th>供應商</th><th>單價(元/kg)</th><th>單價(元/台斤)</th><th>數量(kg)</th><th>數量(台斤)</th><th>金額</th><th>連結商品</th><th>備註</th><th>產地</th><th>品牌廠</th><th>付款</th><th>付款日</th><th>操作</th>
+  </tr></thead><tbody><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777948708434" onchange="toggleSelectOne(&#39;1777948708434&#39;,this.checked)"></td>
+      <td>2026-05-04</td>
+      <td style="font-weight:600;">大排-讚</td>
+      <td>福炫</td>
+      <td style="">$135.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$81.00</td>
+      <td>223.20</td>
+      <td style="color:#888;">372.00</td>
+      <td style="font-weight:600;">$30,132</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777948708434&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777948708434&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777948708435" onchange="toggleSelectOne(&#39;1777948708435&#39;,this.checked)"></td>
+      <td>2026-05-04</td>
+      <td style="font-weight:600;">三枚-法</td>
+      <td>福炫</td>
+      <td style="">$132.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$79.20</td>
+      <td>895.60</td>
+      <td style="color:#888;">1492.67</td>
+      <td style="font-weight:600;">$118,219</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777948708435&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777948708435&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777948708436" onchange="toggleSelectOne(&#39;1777948708436&#39;,this.checked)"></td>
+      <td>2026-05-04</td>
+      <td style="font-weight:600;">小排-復進</td>
+      <td>福炫</td>
+      <td style="">$194.99</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$116.99</td>
+      <td>237.20</td>
+      <td style="color:#888;">395.33</td>
+      <td style="font-weight:600;">$46,252</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777948708436&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777948708436&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777948708437" onchange="toggleSelectOne(&#39;1777948708437&#39;,this.checked)"></td>
+      <td>2026-05-04</td>
+      <td style="font-weight:600;">雞腿-立大</td>
+      <td>福炫</td>
+      <td style="">$64.98</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$38.99</td>
+      <td>23.30</td>
+      <td style="color:#888;">38.83</td>
+      <td style="font-weight:600;">$1,514</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777948708437&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777948708437&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777948754946" onchange="toggleSelectOne(&#39;1777948754946&#39;,this.checked)"></td>
+      <td>2026-05-04</td>
+      <td style="font-weight:600;">後腱</td>
+      <td>台和</td>
+      <td style="">$150.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$90.00</td>
+      <td>60.00</td>
+      <td style="color:#888;">100.00</td>
+      <td style="font-weight:600;">$9,000</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777948754946&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777948754946&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777948754947" onchange="toggleSelectOne(&#39;1777948754947&#39;,this.checked)"></td>
+      <td>2026-05-04</td>
+      <td style="font-weight:600;">小里肌</td>
+      <td>台和</td>
+      <td style="">$170.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$102.00</td>
+      <td>72.00</td>
+      <td style="color:#888;">120.00</td>
+      <td style="font-weight:600;">$12,240</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777948754947&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777948754947&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777865551861" onchange="toggleSelectOne(&#39;1777865551861&#39;,this.checked)"></td>
+      <td>2026-05-03</td>
+      <td style="font-weight:600;">中式香腸#8(台斤)-銓</td>
+      <td>津谷香腸</td>
+      <td style="">$150.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$90.00</td>
+      <td>150.00</td>
+      <td style="color:#888;">250.00</td>
+      <td style="font-weight:600;">$22,500</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777865551861&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777865551861&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777865551862" onchange="toggleSelectOne(&#39;1777865551862&#39;,this.checked)"></td>
+      <td>2026-05-03</td>
+      <td style="font-weight:600;">中式香腸#6(台斤)-銓</td>
+      <td>津谷香腸</td>
+      <td style="">$150.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$90.00</td>
+      <td>369.60</td>
+      <td style="color:#888;">616.00</td>
+      <td style="font-weight:600;">$55,440</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777865551862&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777865551862&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777864984902" onchange="toggleSelectOne(&#39;1777864984902&#39;,this.checked)"></td>
+      <td>2026-05-02</td>
+      <td style="font-weight:600;">清腿肉</td>
+      <td>皇飴</td>
+      <td style="">$141.67</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$85.00</td>
+      <td>72.00</td>
+      <td style="color:#888;">120.00</td>
+      <td style="font-weight:600;">$10,200</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777864984902&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777864984902&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777865466637" onchange="toggleSelectOne(&#39;1777865466637&#39;,this.checked)"></td>
+      <td>2026-05-02</td>
+      <td style="font-weight:600;">副腱</td>
+      <td>榮啟</td>
+      <td style="">$115.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$69.00</td>
+      <td>396.00</td>
+      <td style="color:#888;">660.00</td>
+      <td style="font-weight:600;">$45,540</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;">33T*12K</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777865466637&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777865466637&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777865712293" onchange="toggleSelectOne(&#39;1777865712293&#39;,this.checked)"></td>
+      <td>2026-05-02</td>
+      <td style="font-weight:600;">後腱</td>
+      <td>台和</td>
+      <td style="">$150.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$90.00</td>
+      <td>60.00</td>
+      <td style="color:#888;">100.00</td>
+      <td style="font-weight:600;">$9,000</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;">3T*20K</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777865712293&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777865712293&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777865712294" onchange="toggleSelectOne(&#39;1777865712294&#39;,this.checked)"></td>
+      <td>2026-05-02</td>
+      <td style="font-weight:600;">小里肌</td>
+      <td>台和</td>
+      <td style="">$170.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$102.00</td>
+      <td>72.00</td>
+      <td style="color:#888;">120.00</td>
+      <td style="font-weight:600;">$12,240</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;">6T*12K</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777865712294&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777865712294&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777865712295" onchange="toggleSelectOne(&#39;1777865712295&#39;,this.checked)"></td>
+      <td>2026-05-02</td>
+      <td style="font-weight:600;">下巴</td>
+      <td>台和</td>
+      <td style="">$79.98</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$47.99</td>
+      <td>40.00</td>
+      <td style="color:#888;">66.67</td>
+      <td style="font-weight:600;">$3,199</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;">1T*40K</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777865712295&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777865712295&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777865805773" onchange="toggleSelectOne(&#39;1777865805773&#39;,this.checked)"></td>
+      <td>2026-05-02</td>
+      <td style="font-weight:600;">中式香腸#8(台斤)-銓</td>
+      <td>津谷香腸</td>
+      <td style="">$150.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$90.00</td>
+      <td>169.20</td>
+      <td style="color:#888;">282.00</td>
+      <td style="font-weight:600;">$25,380</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777865805773&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777865805773&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777865805774" onchange="toggleSelectOne(&#39;1777865805774&#39;,this.checked)"></td>
+      <td>2026-05-02</td>
+      <td style="font-weight:600;">中式香腸#6(台斤)-銓</td>
+      <td>津谷香腸</td>
+      <td style="">$150.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$90.00</td>
+      <td>12.00</td>
+      <td style="color:#888;">20.00</td>
+      <td style="font-weight:600;">$1,800</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777865805774&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777865805774&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777865753533" onchange="toggleSelectOne(&#39;1777865753533&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">雞胗</td>
+      <td>皇飴</td>
+      <td style="">$75.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$45.00</td>
+      <td>18.00</td>
+      <td style="color:#888;">30.00</td>
+      <td style="font-weight:600;">$1,350</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777865753533&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777865753533&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866006773" onchange="toggleSelectOne(&#39;1777866006773&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">美國小德腳(壓裝)Swift P995~13.6KG</td>
+      <td>津谷</td>
+      <td style="">$60.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$36.00</td>
+      <td>136.00</td>
+      <td style="color:#888;">226.67</td>
+      <td style="font-weight:600;">$8,160</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866006773&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866006773&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866006774" onchange="toggleSelectOne(&#39;1777866006774&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">松阪肉(紅標)(真空包)-銓-6KG</td>
+      <td>津谷</td>
+      <td style="">$419.99</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$251.99</td>
+      <td>90.00</td>
+      <td style="color:#888;">150.00</td>
+      <td style="font-weight:600;">$37,799</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866006774&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866006774&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866006775" onchange="toggleSelectOne(&#39;1777866006775&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">鹹豬肉片-銓-6KG(3KG*2包)</td>
+      <td>津谷</td>
+      <td style="">$155.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$93.00</td>
+      <td>30.00</td>
+      <td style="color:#888;">50.00</td>
+      <td style="font-weight:600;">$4,650</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866006775&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866006775&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866006776" onchange="toggleSelectOne(&#39;1777866006776&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">國產中肉R(冷凍)-銓(H)</td>
+      <td>津谷</td>
+      <td style="">$179.98</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$107.99</td>
+      <td>73.80</td>
+      <td style="color:#888;">123.00</td>
+      <td style="font-weight:600;">$13,283</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866006776&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866006776&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866190965" onchange="toggleSelectOne(&#39;1777866190965&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">棒腿#2.5~津~15KG(箱裝)</td>
+      <td>津谷</td>
+      <td style="">$60.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$36.00</td>
+      <td>150.00</td>
+      <td style="color:#888;">250.00</td>
+      <td style="font-weight:600;">$9,000</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866190965&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866190965&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866190966" onchange="toggleSelectOne(&#39;1777866190966&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">棒腿#3~津~15KG(箱裝)</td>
+      <td>津谷</td>
+      <td style="">$65.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$39.00</td>
+      <td>75.00</td>
+      <td style="color:#888;">125.00</td>
+      <td style="font-weight:600;">$4,875</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866190966&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866190966&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866190967" onchange="toggleSelectOne(&#39;1777866190967&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">附皮清腿肉(大)(去腳踝)~津~12KG</td>
+      <td>津谷</td>
+      <td style="">$130.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$78.00</td>
+      <td>60.00</td>
+      <td style="color:#888;">100.00</td>
+      <td style="font-weight:600;">$7,800</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866190967&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866190967&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866190968" onchange="toggleSelectOne(&#39;1777866190968&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">骨腿#9~津~15KG(箱裝)</td>
+      <td>津谷</td>
+      <td style="">$77.98</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$46.79</td>
+      <td>75.00</td>
+      <td style="color:#888;">125.00</td>
+      <td style="font-weight:600;">$5,849</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866190968&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866190968&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866190969" onchange="toggleSelectOne(&#39;1777866190969&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">加拿大大腸頭(壓裝)Olymel P10~10KG</td>
+      <td>津谷</td>
+      <td style="">$94.99</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$56.99</td>
+      <td>320.00</td>
+      <td style="color:#888;">533.33</td>
+      <td style="font-weight:600;">$30,397</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866190969&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866190969&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866333894" onchange="toggleSelectOne(&#39;1777866333894&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">棒腿#2.5~津~15KG(箱裝)</td>
+      <td>津谷</td>
+      <td style="">$60.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$36.00</td>
+      <td>450.00</td>
+      <td style="color:#888;">750.00</td>
+      <td style="font-weight:600;">$27,000</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866333894&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866333894&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866333895" onchange="toggleSelectOne(&#39;1777866333895&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">美國小德腳(壓裝)Swift P995~13.6KG</td>
+      <td>津谷</td>
+      <td style="">$60.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$36.00</td>
+      <td>408.00</td>
+      <td style="color:#888;">680.00</td>
+      <td style="font-weight:600;">$24,480</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866333895&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866333895&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866333896" onchange="toggleSelectOne(&#39;1777866333896&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">國產東坡肉原料(900G-1100G)-銓(12入/箱)</td>
+      <td>津谷</td>
+      <td style="">$220.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$132.00</td>
+      <td>212.53</td>
+      <td style="color:#888;">354.22</td>
+      <td style="font-weight:600;">$46,757</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866333896&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866333896&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866333897" onchange="toggleSelectOne(&#39;1777866333897&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">國產中肉R(冷凍)-銓(H)</td>
+      <td>津谷</td>
+      <td style="">$179.98</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$107.99</td>
+      <td>726.60</td>
+      <td style="color:#888;">1211.00</td>
+      <td style="font-weight:600;">$130,773</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866333897&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866333897&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866395101" onchange="toggleSelectOne(&#39;1777866395101&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">後腱</td>
+      <td>台和</td>
+      <td style="">$150.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$90.00</td>
+      <td>400.00</td>
+      <td style="color:#888;">666.67</td>
+      <td style="font-weight:600;">$60,000</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866395101&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866395101&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777866395102" onchange="toggleSelectOne(&#39;1777866395102&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">大腸(保)</td>
+      <td>台和</td>
+      <td style="">$149.99</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$89.99</td>
+      <td>180.00</td>
+      <td style="color:#888;">300.00</td>
+      <td style="font-weight:600;">$26,998</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777866395102&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777866395102&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777948478110" onchange="toggleSelectOne(&#39;1777948478110&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">菊花肉(大)-加-7</td>
+      <td>普惠.淞詮</td>
+      <td style="">$135.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$81.00</td>
+      <td>300.00</td>
+      <td style="color:#888;">500.00</td>
+      <td style="font-weight:600;">$40,500</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777948478110&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777948478110&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777948478111" onchange="toggleSelectOne(&#39;1777948478111&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">小排-美18079</td>
+      <td>普惠.淞詮</td>
+      <td style="">$133.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$79.80</td>
+      <td>429.00</td>
+      <td style="color:#888;">715.00</td>
+      <td style="font-weight:600;">$57,057</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777948478111&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777948478111&#39;)">刪除</button>
+      </td></tr><tr class="">
+      <td><input type="checkbox" class="cb-row" data-id="1777948562858" onchange="toggleSelectOne(&#39;1777948562858&#39;,this.checked)"></td>
+      <td>2026-05-01</td>
+      <td style="font-weight:600;">中式香腸#8(台斤)-銓</td>
+      <td>津谷香腸</td>
+      <td style="">$150.00</td>
+      <td style="color:#1a6bb5;background:rgba(26,107,181,0.08);font-weight:600;border-radius:4px;padding:2px 6px;">$90.00</td>
+      <td>75.78</td>
+      <td style="color:#888;">126.30</td>
+      <td style="font-weight:600;">$11,367</td>
+      <td style="max-width:160px;"><span style="color:#ccc;font-size:11px;">-</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="font-size:11px;"><span style="color:#c0392b;">未付</span></td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="startEditP(&#39;1777948562858&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delPurchase(&#39;1777948562858&#39;)">刪除</button>
+      </td></tr></tbody></table></div>
 </div>
 
 <!-- ══ 2: 開銷記錄 ══ -->
@@ -282,7 +981,7 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
   <div class="card">
     <div class="g4">
       <div><label class="fl">廠商</label>
-        <div class="sb"><input id="e-sup" placeholder="搜尋廠商..." oninput="ddSearch('e-sup','dd-e-sup','expense')" onfocus="ddSearch('e-sup','dd-e-sup','expense')" autocomplete="off"/>
+        <div class="sb"><input id="e-sup" placeholder="搜尋廠商..." oninput="ddSearch(&#39;e-sup&#39;,&#39;dd-e-sup&#39;,&#39;expense&#39;)" onfocus="ddSearch(&#39;e-sup&#39;,&#39;dd-e-sup&#39;,&#39;expense&#39;)" autocomplete="off">
         <div class="dd" id="dd-e-sup"></div></div></div>
       <div><label class="fl">類別</label>
         <select id="e-cat" onchange="showCustom()">
@@ -290,17 +989,17 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
           <option>人事</option><option>運費</option><option>設備</option>
           <option>雜費</option><option value="other">自訂...</option>
         </select></div>
-      <div id="e-cw" style="display:none;"><label class="fl">自訂類別</label><input id="e-custom" placeholder="類別名稱"/></div>
-      <div><label class="fl">金額（元）</label><input type="number" id="e-amt" placeholder="0" min="0"/></div>
+      <div id="e-cw" style="display:none;"><label class="fl">自訂類別</label><input id="e-custom" placeholder="類別名稱"></div>
+      <div><label class="fl">金額（元）</label><input type="number" id="e-amt" placeholder="0" min="0"></div>
     </div>
     <div class="g4">
-      <div><label class="fl">日期</label><input type="date" id="e-date"/></div>
+      <div><label class="fl">日期</label><input type="date" id="e-date"></div>
       <div><label class="fl">付款方式</label>
         <select id="e-pay" onchange="showBank()">
           <option value="cash">現金</option><option value="transfer">匯款</option>
         </select></div>
-      <div><label class="fl">說明</label><input id="e-desc" placeholder="例：A4紙箱100個"/></div>
-      <div><label class="fl">備註</label><input id="e-note2" placeholder="選填"/></div>
+      <div><label class="fl">說明</label><input id="e-desc" placeholder="例：A4紙箱100個"></div>
+      <div><label class="fl">備註</label><input id="e-note2" placeholder="選填"></div>
     </div>
     <div class="bank-box" id="bank-box">💳 <span id="bank-info">請先選擇廠商</span></div>
     <div style="display:flex;gap:10px;align-items:center;">
@@ -309,25 +1008,25 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
     </div>
   </div>
   <div class="sarea">
-    <input type="date" id="e-s" style="width:138px;"/>
+    <input type="date" id="e-s" style="width:138px;">
     <span style="color:#888;">－</span>
-    <input type="date" id="e-e" style="width:138px;"/>
-    <input id="e-kw" placeholder="搜尋說明/類別" style="width:160px;" oninput="renderExpense()"/>
+    <input type="date" id="e-e" style="width:138px;">
+    <input id="e-kw" placeholder="搜尋說明/類別" style="width:160px;" oninput="renderExpense()">
     <button class="btn btn-b" onclick="loadExpenses()">雲端重載</button>
   </div>
   <div id="e-sum" style="margin-bottom:8px;"></div>
-  <div class="tbl-wrap" id="e-tbl"></div>
+  <div class="tbl-wrap" id="e-tbl"><div class="empty">尚無開銷記錄</div></div>
 </div>
 
 <!-- ══ 3: 報表 ══ -->
 <div class="sec" id="s3">
   <div class="card">
     <div class="sarea" style="margin:0;">
-      <input type="date" id="r-s" style="width:138px;"/>
+      <input type="date" id="r-s" style="width:138px;">
       <span style="color:#888;">－</span>
-      <input type="date" id="r-e" style="width:138px;"/>
+      <input type="date" id="r-e" style="width:138px;">
       <div class="sb" style="width:150px;">
-        <input id="r-sup" placeholder="全部廠商" oninput="ddRSup(this.value)" onfocus="ddRSup(this.value)" autocomplete="off" style="width:100%;"/>
+        <input id="r-sup" placeholder="全部廠商" oninput="ddRSup(this.value)" onfocus="ddRSup(this.value)" autocomplete="off" style="width:100%;">
         <div class="dd" id="dd-r-sup"></div>
       </div>
       <button class="btn btn-p" onclick="genReport()">產生報表</button>
@@ -342,24 +1041,24 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
 <!-- ══ 4: 廠商管理 ══ -->
 <div class="sec" id="s4">
   <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-    <button class="btn btn-b" onclick="openSupForm('purchase')">＋ 新增進貨廠商</button>
-    <button class="btn btn-g" onclick="openSupForm('expense')">＋ 新增開銷廠商</button>
+    <button class="btn btn-b" onclick="openSupForm(&#39;purchase&#39;)">＋ 新增進貨廠商</button>
+    <button class="btn btn-g" onclick="openSupForm(&#39;expense&#39;)">＋ 新增開銷廠商</button>
   </div>
   <div class="card" id="sup-form" style="display:none;margin-bottom:12px;">
     <div style="font-size:13px;font-weight:600;margin-bottom:10px;" id="sup-form-title">新增廠商</div>
-    <input type="hidden" id="sup-type"/>
-    <input type="hidden" id="sup-edit-id"/>
+    <input type="hidden" id="sup-type">
+    <input type="hidden" id="sup-edit-id">
     <div class="g4">
-      <div><label class="fl">廠商名稱*</label><input id="sf-name" placeholder="廠商名稱"/></div>
-      <div><label class="fl">聯絡人</label><input id="sf-contact" placeholder="聯絡人"/></div>
-      <div><label class="fl">電話</label><input id="sf-phone" placeholder="電話"/></div>
-      <div><label class="fl">分類標籤</label><input id="sf-tag" placeholder="例：雞肉、豬肉"/></div>
+      <div><label class="fl">廠商名稱*</label><input id="sf-name" placeholder="廠商名稱"></div>
+      <div><label class="fl">聯絡人</label><input id="sf-contact" placeholder="聯絡人"></div>
+      <div><label class="fl">電話</label><input id="sf-phone" placeholder="電話"></div>
+      <div><label class="fl">分類標籤</label><input id="sf-tag" placeholder="例：雞肉、豬肉"></div>
     </div>
     <div class="g4">
-      <div><label class="fl">銀行名稱</label><input id="sf-bank" placeholder="例：台灣銀行-屏東分行"/></div>
-      <div><label class="fl">帳號</label><input id="sf-acct" placeholder="帳號"/></div>
-      <div><label class="fl">戶名</label><input id="sf-acname" placeholder="戶名"/></div>
-      <div><label class="fl">備註</label><input id="sf-note" placeholder="選填"/></div>
+      <div><label class="fl">銀行名稱</label><input id="sf-bank" placeholder="例：台灣銀行-屏東分行"></div>
+      <div><label class="fl">帳號</label><input id="sf-acct" placeholder="帳號"></div>
+      <div><label class="fl">戶名</label><input id="sf-acname" placeholder="戶名"></div>
+      <div><label class="fl">備註</label><input id="sf-note" placeholder="選填"></div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;">
       <button class="btn btn-p" onclick="saveSup()">儲存</button>
@@ -368,9 +1067,167 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
     </div>
   </div>
   <div style="font-size:13px;font-weight:600;color:#185FA5;margin-bottom:8px;">📦 進貨廠商</div>
-  <div class="tbl-wrap" id="sup-p-tbl"></div>
+  <div class="tbl-wrap" id="sup-p-tbl"><div style="overflow-x:auto;"><table style="min-width:800px;"><thead><tr>
+      <th>廠商名稱</th><th>分類</th><th>聯絡人</th><th>電話</th><th>銀行</th><th>帳號</th><th>戶名</th><th>備註</th><th>操作</th>
+    </tr></thead><tbody><tr>
+      <td style="font-weight:600;">福炫</td>
+      <td><span class="badge bb">進口豬肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">上海銀行-屏東分行</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">46102000016153</td>
+      <td style="font-size:11px;">侑酆貿易有限公司</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s01&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s01&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">弘飛</td>
+      <td><span class="badge bb">豬肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">台灣土地銀行-光復分行</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">129001000325</td>
+      <td style="font-size:11px;">弘飛興業股份有限公司</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s02&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s02&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">百傑</td>
+      <td><span class="badge bb">調理豬肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">彰化銀行-樹林分行</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">55675160282600</td>
+      <td style="font-size:11px;">王鈺華</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s03&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s03&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">福皓行</td>
+      <td><span class="badge bb">豬肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">台灣銀行-東港分行</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">155008027916</td>
+      <td style="font-size:11px;">張福順</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s04&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s04&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">誠昌.層昌</td>
+      <td><span class="badge bb">豬肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">台中銀行-秀水分行</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">074221042688</td>
+      <td style="font-size:11px;">誠昌實業股份有限公司</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s05&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s05&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">台和</td>
+      <td><span class="badge bb">牛豬</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">台企銀行-屏東分行</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">89012110635</td>
+      <td style="font-size:11px;">台和冷凍股份有限公司</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s06&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s06&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">皇飴</td>
+      <td><span class="badge bb">雞肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">第一銀行-新生分行</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">13310013931</td>
+      <td style="font-size:11px;">皇飴國際有限公司</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s07&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s07&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">津谷</td>
+      <td><span class="badge bb">雞豬肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">-</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">-</td>
+      <td style="font-size:11px;">-</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s08&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s08&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">津谷香腸</td>
+      <td><span class="badge bb">香腸</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">-</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">-</td>
+      <td style="font-size:11px;">-</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s09&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s09&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">榮啟</td>
+      <td><span class="badge bb">牛肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">中國信託-屏東分行</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">207540106966</td>
+      <td style="font-size:11px;">李柏鋐</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s10&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s10&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">鄉根</td>
+      <td><span class="badge bb">煙肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">台北富邦-中和分行</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">681168238735</td>
+      <td style="font-size:11px;">陳宥宇</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s11&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s11&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">普惠.淞詮</td>
+      <td><span class="badge bb">豬肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">-</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">-</td>
+      <td style="font-size:11px;">-</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s12&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s12&#39;)">刪除</button>
+      </td>
+    </tr><tr>
+      <td style="font-weight:600;">華漢</td>
+      <td><span class="badge bb">豬肉</span></td>
+      <td>-</td><td>-</td>
+      <td style="font-size:11px;">兆豐銀行-新都分行</td>
+      <td style="font-size:11px;font-weight:600;color:#185FA5;">23510871566</td>
+      <td style="font-size:11px;">李春來</td>
+      <td style="font-size:11px;color:#888;"></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-s" onclick="openSupForm(&#39;purchase&#39;,&#39;s13&#39;)" style="margin-right:3px;">編輯</button>
+        <button class="btn-s btn-del" onclick="delSup(&#39;purchase&#39;,&#39;s13&#39;)">刪除</button>
+      </td>
+    </tr></tbody></table></div></div>
   <div style="font-size:13px;font-weight:600;color:#2d7d46;margin:14px 0 8px;">💸 開銷廠商</div>
-  <div class="tbl-wrap" id="sup-e-tbl"></div>
+  <div class="tbl-wrap" id="sup-e-tbl"><div class="empty">尚無廠商，請點上方按鈕新增</div></div>
 </div>
 
 <!-- ══ 5: 商品表 ══ -->
@@ -378,14 +1235,14 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
   <div class="card" style="margin-bottom:12px;">
     <div style="font-size:13px;font-weight:600;margin-bottom:8px;">新增商品</div>
     <div class="g4">
-      <div><label class="fl">商品名稱*</label><input id="np-name" placeholder="商品名稱"/></div>
+      <div><label class="fl">商品名稱*</label><input id="np-name" placeholder="商品名稱"></div>
       <div><label class="fl">大類</label><select id="np-cat"><option>豬肉類</option><option>雞肉類</option><option>其他</option></select></div>
-      <div><label class="fl">小類</label><input id="np-sub" placeholder="例：豬肉分切"/></div>
-      <div><label class="fl">進貨單位</label><input id="np-unit" placeholder="公斤"/></div>
+      <div><label class="fl">小類</label><input id="np-sub" placeholder="例：豬肉分切"></div>
+      <div><label class="fl">進貨單位</label><input id="np-unit" placeholder="公斤"></div>
     </div>
     <div class="g4">
       <div><label class="fl">銷貨單位</label>
-        <select id="np-sale-unit" onchange="toggleKgPerCase('np')">
+        <select id="np-sale-unit" onchange="toggleKgPerCase(&#39;np&#39;)">
           <option value="kg">公斤</option>
           <option value="tj">台斤</option>
           <option value="case">件</option>
@@ -393,7 +1250,7 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
       </div>
       <div id="np-kgcase-wrap" style="display:none;">
         <label class="fl">每件公斤數</label>
-        <input type="number" id="np-kg-per-case" placeholder="例：15" min="0" step="0.01"/>
+        <input type="number" id="np-kg-per-case" placeholder="例：15" min="0" step="0.01">
       </div>
       <div></div><div></div>
     </div>
@@ -403,22 +1260,664 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
     </div>
   </div>
   <div class="sarea">
-    <input id="p-kw" placeholder="搜尋商品名稱" style="width:200px;" oninput="renderProducts()"/>
+    <input id="p-kw" placeholder="搜尋商品名稱" style="width:200px;" oninput="renderProducts()">
     <select id="p-cat" style="width:120px;" onchange="renderProducts()"><option value="">所有大類</option><option>豬肉類</option><option>雞肉類</option><option>其他</option></select>
   </div>
-  <div id="p-tbl"></div>
+  <div id="p-tbl">
+    <div class="card" style="margin-bottom:8px;">
+      <div style="font-size:11px;color:#888;margin-bottom:8px;font-weight:600;">豬肉類 › 豬肉原料</div>
+      <table style="min-width:0;"><thead><tr>
+        <th>商品名稱</th><th>大類</th><th>小類</th><th>進貨單位</th><th>銷貨單位</th><th>每件公斤</th><th style="width:90px;"></th>
+      </tr></thead><tbody>
+      <tr>
+          <td style="font-weight:500;">進口-大里肌</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;進口-大里肌&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">進口-里肌心</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;進口-里肌心&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">小里肌</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;小里肌&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">進口-梅花肉</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;進口-梅花肉&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">梅花肉</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;梅花肉&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">進口-五花肉</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;進口-五花肉&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">五花肉</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;五花肉&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">去皮五花肉</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;去皮五花肉&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">進口-去皮五花肉-壓</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;進口-去皮五花肉-壓&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">進口-後腿肉(赤肉)</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;進口-後腿肉(赤肉)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">進口-小排</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;進口-小排&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">小排(腩排)</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;小排(腩排)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">蹄膀(腿庫)(腳庫)</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;蹄膀(腿庫)(腳庫)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">豬棒腿</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;豬棒腿&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">前腱</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;前腱&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">後腱</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;後腱&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">大腸</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;大腸&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">大腸頭</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;大腸頭&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">松阪肉(平鋪)</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;松阪肉(平鋪)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">松阪肉(真空)</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;松阪肉(真空)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">菊花肉(嘴邊肉)</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;菊花肉(嘴邊肉)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">大骨</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;大骨&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">豬肚</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;豬肚&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">豬耳</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;豬耳&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">豬舌</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;豬舌&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">豬皮</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;豬皮&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">小德腳</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;小德腳&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">大德腳</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;大德腳&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">豬前腳</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;豬前腳&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">豬後腳</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;豬後腳&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">虎掌</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;虎掌&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">霜降肉</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉原料</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;霜降肉&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr>
+      </tbody></table>
+    </div>
+    <div class="card" style="margin-bottom:8px;">
+      <div style="font-size:11px;color:#888;margin-bottom:8px;font-weight:600;">豬肉類 › 豬肉分切</div>
+      <table style="min-width:0;"><thead><tr>
+        <th>商品名稱</th><th>大類</th><th>小類</th><th>進貨單位</th><th>銷貨單位</th><th>每件公斤</th><th style="width:90px;"></th>
+      </tr></thead><tbody>
+      <tr>
+          <td style="font-weight:500;">肉絲</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;肉絲&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">中片-(五花肉片)</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;中片-(五花肉片)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">皮油丁</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;皮油丁&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">梅花肉片</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;梅花肉片&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">絞肉</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;絞肉&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">後腿肉</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;後腿肉&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">大里肌</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;大里肌&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">小里肌</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;小里肌&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr>
+      </tbody></table>
+    </div>
+    <div class="card" style="margin-bottom:8px;">
+      <div style="font-size:11px;color:#888;margin-bottom:8px;font-weight:600;">豬肉類 › 豬肉調理</div>
+      <table style="min-width:0;"><thead><tr>
+        <th>商品名稱</th><th>大類</th><th>小類</th><th>進貨單位</th><th>銷貨單位</th><th>每件公斤</th><th style="width:90px;"></th>
+      </tr></thead><tbody>
+      <tr>
+          <td style="font-weight:500;">美式香腸(現灌)</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉調理</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;美式香腸(現灌)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">中式香腸#6(現灌)</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉調理</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;中式香腸#6(現灌)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">鹹豬肉條</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉調理</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;鹹豬肉條&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">鹹豬肉片</td>
+          <td style="font-size:12px;color:#888;">豬肉類</td>
+          <td style="font-size:12px;color:#888;">豬肉調理</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;鹹豬肉片&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr>
+      </tbody></table>
+    </div>
+    <div class="card" style="margin-bottom:8px;">
+      <div style="font-size:11px;color:#888;margin-bottom:8px;font-weight:600;">雞肉類 › 雞棒腿</div>
+      <table style="min-width:0;"><thead><tr>
+        <th>商品名稱</th><th>大類</th><th>小類</th><th>進貨單位</th><th>銷貨單位</th><th>每件公斤</th><th style="width:90px;"></th>
+      </tr></thead><tbody>
+      <tr>
+          <td style="font-weight:500;">棒腿2.5(棒2.5)(D2.5)</td>
+          <td style="font-size:12px;color:#888;">雞肉類</td>
+          <td style="font-size:12px;color:#888;">雞棒腿</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;棒腿2.5(棒2.5)(D2.5)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">棒腿3(棒3)(D3)</td>
+          <td style="font-size:12px;color:#888;">雞肉類</td>
+          <td style="font-size:12px;color:#888;">雞棒腿</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;棒腿3(棒3)(D3)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">棒腿3.5(棒3.5)(D3.5)</td>
+          <td style="font-size:12px;color:#888;">雞肉類</td>
+          <td style="font-size:12px;color:#888;">雞棒腿</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;棒腿3.5(棒3.5)(D3.5)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">棒腿4(棒4)(D4)</td>
+          <td style="font-size:12px;color:#888;">雞肉類</td>
+          <td style="font-size:12px;color:#888;">雞棒腿</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;棒腿4(棒4)(D4)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr>
+      </tbody></table>
+    </div>
+    <div class="card" style="margin-bottom:8px;">
+      <div style="font-size:11px;color:#888;margin-bottom:8px;font-weight:600;">雞肉類 › 雞骨腿</div>
+      <table style="min-width:0;"><thead><tr>
+        <th>商品名稱</th><th>大類</th><th>小類</th><th>進貨單位</th><th>銷貨單位</th><th>每件公斤</th><th style="width:90px;"></th>
+      </tr></thead><tbody>
+      <tr>
+          <td style="font-weight:500;">骨腿7兩(骨7)(T7)</td>
+          <td style="font-size:12px;color:#888;">雞肉類</td>
+          <td style="font-size:12px;color:#888;">雞骨腿</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;骨腿7兩(骨7)(T7)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">骨腿9兩(骨9)(T9)</td>
+          <td style="font-size:12px;color:#888;">雞肉類</td>
+          <td style="font-size:12px;color:#888;">雞骨腿</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;骨腿9兩(骨9)(T9)&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr>
+      </tbody></table>
+    </div>
+    <div class="card" style="margin-bottom:8px;">
+      <div style="font-size:11px;color:#888;margin-bottom:8px;font-weight:600;">雞肉類 › 雞肉分切</div>
+      <table style="min-width:0;"><thead><tr>
+        <th>商品名稱</th><th>大類</th><th>小類</th><th>進貨單位</th><th>銷貨單位</th><th>每件公斤</th><th style="width:90px;"></th>
+      </tr></thead><tbody>
+      <tr>
+          <td style="font-weight:500;">翅小腿</td>
+          <td style="font-size:12px;color:#888;">雞肉類</td>
+          <td style="font-size:12px;color:#888;">雞肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;翅小腿&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">二節翅</td>
+          <td style="font-size:12px;color:#888;">雞肉類</td>
+          <td style="font-size:12px;color:#888;">雞肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;二節翅&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">雞胗</td>
+          <td style="font-size:12px;color:#888;">雞肉類</td>
+          <td style="font-size:12px;color:#888;">雞肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;雞胗&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr><tr>
+          <td style="font-weight:500;">雞胸清肉</td>
+          <td style="font-size:12px;color:#888;">雞肉類</td>
+          <td style="font-size:12px;color:#888;">雞肉分切</td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="font-size:12px;"><span class="badge bb">公斤</span></td>
+          <td style="font-size:12px;color:#888;">-</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-s" onclick="startEditProd(&#39;雞胸清肉&#39;)" style="margin-right:2px;">編輯</button>
+            
+          </td>
+        </tr>
+      </tbody></table>
+    </div></div>
 </div>
 
 <!-- ══ 6: 平均成本 ══ -->
 <div class="sec" id="s6">
   <div class="sarea" style="flex-wrap:wrap;">
     <div class="sb" style="flex:1;max-width:280px;">
-      <input id="c-search" placeholder="輸入商品名稱搜尋..." oninput="ddCost(this.value)" onfocus="ddCost(this.value)" autocomplete="off"/>
+      <input id="c-search" placeholder="輸入商品名稱搜尋..." oninput="ddCost(this.value)" onfocus="ddCost(this.value)" autocomplete="off">
       <div class="dd" id="dd-cost"></div>
     </div>
-    <input type="date" id="c-start" style="width:138px;"/>
+    <input type="date" id="c-start" style="width:138px;">
     <span style="color:#888;">－</span>
-    <input type="date" id="c-end" style="width:138px;"/>
+    <input type="date" id="c-end" style="width:138px;">
     <button class="btn btn-o" onclick="setThisMonthCost()">本月</button>
     <button class="btn btn-o" onclick="clearCost()">清除</button>
   </div>
@@ -434,8 +1933,8 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
     </div>
     <div class="ai-chat-msgs" id="ai-tab-msgs"></div>
     <div class="ai-input-row">
-      <textarea id="ai-tab-input" placeholder="輸入問題，Enter 送出，Shift+Enter 換行..." onkeydown="aiFltKeydown(event,'tab')"></textarea>
-      <button class="ai-send-btn" id="ai-tab-send" onclick="aiSend('tab')">送出</button>
+      <textarea id="ai-tab-input" placeholder="輸入問題，Enter 送出，Shift+Enter 換行..." onkeydown="aiFltKeydown(event,&#39;tab&#39;)"></textarea>
+      <button class="ai-send-btn" id="ai-tab-send" onclick="aiSend(&#39;tab&#39;)">送出</button>
     </div>
   </div>
 </div>
@@ -451,8 +1950,8 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
   </div>
   <div class="ai-chat-msgs" id="ai-float-msgs"></div>
   <div class="ai-input-row">
-    <textarea id="ai-float-input" placeholder="輸入問題，Enter 送出..." onkeydown="aiFltKeydown(event,'float')"></textarea>
-    <button class="ai-send-btn" id="ai-float-send" onclick="aiSend('float')">送出</button>
+    <textarea id="ai-float-input" placeholder="輸入問題，Enter 送出..." onkeydown="aiFltKeydown(event,&#39;float&#39;)"></textarea>
+    <button class="ai-send-btn" id="ai-float-send" onclick="aiSend(&#39;float&#39;)">送出</button>
   </div>
 </div>
 
@@ -469,11 +1968,11 @@ tr.h-selected:hover td{background:rgba(107,70,193,.11)!important;}
     </div>
     <div style="margin-bottom:10px;">
       <label class="fl">小類（例：豬肉分切、雞肉副產）</label>
-      <input id="apd-sub" placeholder="輸入小類名稱" style="width:100%;padding:7px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;"/>
+      <input id="apd-sub" placeholder="輸入小類名稱" style="width:100%;padding:7px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;">
     </div>
     <div style="margin-bottom:16px;">
       <label class="fl">單位</label>
-      <input id="apd-unit" value="公斤" style="width:100%;padding:7px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;"/>
+      <input id="apd-unit" value="公斤" style="width:100%;padding:7px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;">
     </div>
     <div style="display:flex;gap:8px;">
       <button class="btn btn-p" style="flex:1;" onclick="confirmAddProd()">新增並連結</button>
@@ -2784,10 +4283,10 @@ function aiFltKeydown(e,src){
     <h3 id="pm-title"></h3>
     <div style="margin-bottom:16px;">
       <label class="fl">付款日期</label>
-      <input type="date" id="pm-date" style="width:100%;font-size:14px;"/>
+      <input type="date" id="pm-date" style="width:100%;font-size:14px;">
     </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
-      <button class="btn btn-o" onclick="document.getElementById('pay-modal-overlay').classList.remove('open')">取消</button>
+      <button class="btn btn-o" onclick="document.getElementById(&#39;pay-modal-overlay&#39;).classList.remove(&#39;open&#39;)">取消</button>
       <button class="btn btn-g" onclick="batchMarkPaidConfirm()">確認</button>
     </div>
   </div>
@@ -2795,5 +4294,6 @@ function aiFltKeydown(e,src){
 
 <!-- ══ Toast ══ -->
 <div id="toast" class="toast"></div>
-</body>
-</html>
+
+
+</body></html>
